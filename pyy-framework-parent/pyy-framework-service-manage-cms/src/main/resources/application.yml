@@ -1,0 +1,12 @@
+server:
+  port: 31001
+spring:
+  application:
+    name: pyy-framework-service-manage-cms
+  data:
+    mongodb:
+      uri:  mongodb://10.10.50.189:27017/pyy_cms
+
+  jackson:
+    serialization:
+      write-dates-as-timestamps: true
