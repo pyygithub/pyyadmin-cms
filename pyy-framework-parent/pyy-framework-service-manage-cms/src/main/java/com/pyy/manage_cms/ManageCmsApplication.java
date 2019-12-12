@@ -16,6 +16,7 @@ import org.springframework.context.annotation.ComponentScan;
  */
 @EntityScan("com.pyy.framework.domain.cms") //扫描实体类
 @ComponentScan(basePackages={"com.pyy.api"})//扫描接口
+@ComponentScan(basePackages={"com.pyy.framework"})//扫描common的所有类
 @ComponentScan(basePackages={"com.pyy.manage_cms"})//扫描本项目下的所有类
 @SpringBootApplication
 public class ManageCmsApplication {

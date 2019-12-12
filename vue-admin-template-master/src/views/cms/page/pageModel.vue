@@ -2,9 +2,10 @@
   <el-drawer
     :title="title"
     :visible.sync="visible"
-    :direction="direction">
+    @close="resetForm"
+    :wrapperClosable="false" ref="pageDrawer">
     <div class="model-content">
-      <el-form :model="pageForm" label-width="80px" size="small">
+      <el-form :model="pageForm" :rules="pageFormRules" ref="pageForm" label-width="80px" size="small">
         <el-form-item label="所属站点" prop="siteId">
           <el-select v-model="pageForm.siteId" placeholder="请选择站点">
             <el-option v-for="item in siteList" :key="item.siteId" :label="item.siteName"
@@ -19,7 +20,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="页面名称" prop="pageName">
-          <el-input v-model="pageForm.pageName" auto-complete="off" autofocus></el-input>
+          <el-input v-model="pageForm.pageName" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="别名" prop="pageAliase">
           <el-input v-model="pageForm.pageAliase" auto-complete="off"></el-input>
@@ -42,14 +43,16 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer" style="text-align: right">
-        <el-button type="plain" size="small" @click="addSubmit">关闭</el-button>
-        <el-button type="primary" size="small" @click="addSubmit">提交</el-button>
+        <el-button type="plain" size="small" @click="handleCancel">关闭</el-button>
+        <el-button type="primary" size="small" @click="handleSubmit">提交</el-button>
       </div>
     </div>
   </el-drawer>
 </template>
 
 <script type="text/ecmascript-6">
+  import * as cmsPageAPI from '../../../api/cms/page/index'
+
   export default {
     name: 'addModal',
     data () {
@@ -57,27 +60,117 @@
         title: '',
         visible: false,
         confirmLoading: false,
-        //站点列表
-        siteList:[],
-        //模版列表
-        templateList:[],
-        //新增界面数据
+        // 站点列表
+        siteList: [],
+        // 模版列表
+        templateList: [],
+        // 新增界面数据
         pageForm: {
-            siteId:'',
-          templateId:'',
+          pageId: '',
+          siteId: '',
+          templateId: '',
           pageName: '',
           pageAliase: '',
           pageWebPath: '',
-          pageParameter:'',
-          pagePhysicalPath:'',
-          pageType:'',
+          pageParameter: '',
+          pagePhysicalPath: '',
+          pageType: '0',
           pageCreateTime: new Date()
+        },
+        // 验证规则
+        pageFormRules: {
+          siteId: [{required: true, message: '请选择站点', trigger: 'blur'}],
+          templateId: [{required: true, message: '请选择模版', trigger: 'blur'}],
+          pageName: [{required: true, message: '请输入页面名称', trigger: 'blur'}],
+          pageWebPath: [{required: true, message: '请输入访问路径', trigger: 'blur'}],
+          pagePhysicalPath: [{required: true, message: '请输入物理路径', trigger: 'blur'}]
         }
       }
     },
+    created () {
+      //初始化站点列表
+      this.siteList = [
+        {
+          siteId: '5a751fab6abb5044e0d19ea1',
+          siteName: '门户主站'
+        },
+        {
+          siteId: '102',
+          siteName: '测试站'
+        }
+      ],
+        //模板列表
+        this.templateList = [
+          {
+            templateId: '5a962b52b00ffc514038faf7',
+            templateName: '首页'
+          },
+          {
+            templateId: '5a962bf8b00ffc514038fafa',
+            templateName: '轮播图'
+          }
+        ]
+    },
     methods: {
-      handleAdd () {
+      // 打开添加对话框
+      openAdd () {
         this.visible = true
+      },
+      // 打开编辑对话框
+      openEdit (id) {
+        console.log(id)
+        this.visible = true
+        this.$nextTick(() => {
+          // 异步查询
+          cmsPageAPI.getPageById(id).then(res => {
+            console.log(res)
+            if (res.success) {
+              const cmsPage = res.data
+              this.pageForm.pageId = cmsPage.pageId
+              this.pageForm.siteId = cmsPage.siteId
+              this.pageForm.templateId = cmsPage.templateId
+              this.pageForm.pageName = cmsPage.pageName
+              this.pageForm.pageAliase = cmsPage.pageAliase
+              this.pageForm.pageWebPath = cmsPage.pageWebPath
+              this.pageForm.pageParameter = cmsPage.pageParameter
+              this.pageForm.pagePhysicalPath = cmsPage.pagePhysicalPath
+              this.pageForm.pageType = cmsPage.pageType
+              this.pageForm.pageCreateTime = cmsPage.pageCreateTime
+            }
+          })
+        })
+      },
+      // 重置form
+      resetForm () {
+        this.$refs.pageForm.resetFields();
+      },
+      // 关闭Drewer对话框
+      handleCancel () {
+        this.resetForm()
+        this.$refs.pageDrawer.closeDrawer()
+      },
+      // 提交
+      handleSubmit () {
+        // 表单验证
+        this.$refs.pageForm.validate(async (valid) => {
+          if (valid) {
+            if (!this.pageForm.pageId) {
+              // 异步添加
+              await cmsPageAPI.addPage(this.pageForm)
+            } else {
+              // 异步修改
+              await cmsPageAPI.updatePage(this.pageForm.pageId, this.pageForm)
+            }
+            this.$notify({ title: '成功',  message: '提交页面',  type: 'success'});
+            // 关闭对话框
+            this.handleCancel()
+            // 刷新查询
+            this.$parent.handleQuery()
+          } else {
+            this.$notify({ title: '失败', message: '提交页面', type: 'error'});
+            return false;
+          }
+        });
       }
     }
   }
@@ -89,11 +182,12 @@
     padding: 15px;
     border: 1px solid rgb(233, 233, 233);
   }
+
   .el-drawer__header {
     padding: 16px 24px;
     border-radius: 4px 4px 0 0;
     background: #fff;
-    color: rgba(0,0,0,.65);
+    color: rgba(0, 0, 0, .65);
     border-bottom: 1px solid #e8e8e8;
     margin-bottom: 0px;
   }

@@ -19,7 +19,6 @@
 
     <!-- 页面列表 -->
     <el-table :data="list" style="width: 100%">
-      <el-table-column type="selection" width="55"/>
       <el-table-column type="index" label="序号" width="50"/>
       <el-table-column prop="pageName" label="页面名称" width="180"/>
       <el-table-column prop="pageAliase" label="别名" width="120"/>
@@ -39,12 +38,12 @@
         <template slot-scope="scope">
           <el-button
             size="mini"
-            @click="handleEdit(scope.$index, scope.row)">编辑
+            @click="handleEdit(scope.row.pageId)">编辑
           </el-button>
           <el-button
             size="mini"
             type="danger"
-            @click="handleDelete(scope.$index, scope.row)">删除
+            @click="handleDelete(scope.row.pageId)">删除
           </el-button>
         </template>
       </el-table-column>
@@ -66,7 +65,7 @@
 </template>
 
 <script>
-  import * as CmsPageAPI from '../../../api/cms/page/index'
+  import * as cmsPageAPI from '../../../api/cms/page/index'
   import addModal from './pageModel.vue'
   export default {
     data() {
@@ -101,24 +100,34 @@
       ]
     },
     methods: {
-
       // 查询
       async handleQuery () {
-        const result = await CmsPageAPI.getPageList(this.page, this.size, this.params)
-        const {queryResult} = result
+        const result = await cmsPageAPI.getPageList(this.page, this.size, this.params)
+        const queryResult = result.data
         this.total = queryResult.total
         this.list = queryResult.list
       },
       handleAdd () {
         this.$refs.addModel.title = '新增'
-        this.$refs.addModel.handleAdd()
+        this.$refs.addModel.openAdd()
       },
-      handleEdit () {
+      handleEdit (pageId) {
         this.$refs.addModel.title = '编辑'
-        this.$refs.addModel.handleAdd()
+        this.$refs.addModel.openEdit(pageId)
       },
-      handleDelete () {
+      handleDelete (pageId) {
+        this.$confirm('此操作将永久删除该数据, 是否继续?', '提示', {
+          type: 'warning'
+        }).then(async () => {
+          // 执行异步删除
+          await cmsPageAPI.deltetPage(pageId)
+          this.$message({type: 'success', message: '删除成功!'});
+          // 刷新列表
+          this.handleQuery()
 
+        }).catch(() => {
+          this.$message({ ype: 'info', message: '已取消删除'});
+        });
       },
       handleSizeChange(size) {
         console.log(`每页 ${size} 条`);

@@ -3,8 +3,10 @@ package com.pyy.manage_cms.controller;
 import com.pyy.api.cms.CmsPageControllerApi;
 import com.pyy.framework.domain.cms.CmsPage;
 import com.pyy.framework.domain.cms.request.QueryPageRequest;
-import com.pyy.framework.domain.cms.response.CmsPageResult;
+import com.pyy.framework.model.response.CommonCode;
 import com.pyy.framework.model.response.QueryResponseResult;
+import com.pyy.framework.model.response.QueryResult;
+import com.pyy.framework.model.response.ResponseResult;
 import com.pyy.manage_cms.service.CmsPageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -19,21 +21,38 @@ import org.springframework.web.bind.annotation.*;
  * ========================
  */
 @RestController
-@RequestMapping("/cms")
 public class CmsPageController implements CmsPageControllerApi {
 
     @Autowired
     private CmsPageService cmsPageService;
 
     @Override
-    @GetMapping("/page/list/{page}/{size}")
-    public QueryResponseResult findList(@PathVariable("page") int page, @PathVariable("size") int size, QueryPageRequest queryPageRequest) {
-        return cmsPageService.findList(page,size,queryPageRequest);
+    public QueryResponseResult findList(int page, int size, QueryPageRequest queryPageRequest) {
+        QueryResult queryResult = cmsPageService.findList(page, size, queryPageRequest);
+        return new QueryResponseResult(CommonCode.SUCCESS, queryResult);
     }
 
     @Override
-    @PostMapping("/page")
-    public CmsPageResult add(@RequestBody CmsPage cmsPage) {
-        return cmsPageService.add(cmsPage);
+    public ResponseResult<CmsPage> add(CmsPage cmsPage) {
+        cmsPage = cmsPageService.add(cmsPage);
+        return ResponseResult.SUCCESS(cmsPage);
+    }
+
+    @Override
+    public ResponseResult<CmsPage> findById(String id) {
+        CmsPage cmsPage = cmsPageService.findById(id);
+        return ResponseResult.SUCCESS(cmsPage);
+    }
+
+    @Override
+    public ResponseResult<CmsPage> edit(String id, CmsPage cmsPage) {
+        cmsPage = cmsPageService.update(id, cmsPage);
+        return ResponseResult.SUCCESS(cmsPage);
+    }
+
+    @Override
+    public ResponseResult delete(String id) {
+        cmsPageService.delete(id);
+        return ResponseResult.SUCCESS();
     }
 }

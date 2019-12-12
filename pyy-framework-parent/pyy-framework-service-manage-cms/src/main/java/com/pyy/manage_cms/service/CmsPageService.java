@@ -2,8 +2,7 @@ package com.pyy.manage_cms.service;
 
 import com.pyy.framework.domain.cms.CmsPage;
 import com.pyy.framework.domain.cms.request.QueryPageRequest;
-import com.pyy.framework.domain.cms.response.CmsPageResult;
-import com.pyy.framework.model.response.QueryResponseResult;
+import com.pyy.framework.model.response.QueryResult;
 
 /**
  * ========================
@@ -22,12 +21,34 @@ public interface CmsPageService {
      * @param queryPageRequest
      * @return
      */
-    QueryResponseResult findList(int page, int size, QueryPageRequest queryPageRequest) ;
+    QueryResult findList(int page, int size, QueryPageRequest queryPageRequest) ;
 
     /**
      * 添加页面
      * @param cmsPage
      * @return
      */
-    CmsPageResult add(CmsPage cmsPage);
+    CmsPage add(CmsPage cmsPage);
+
+    /**
+     * 修改页面
+     * @param id
+     * @param cmsPage
+     * @return
+     */
+    CmsPage update(String id, CmsPage cmsPage);
+
+    /**
+     * 根据ID查询页面
+     * @param id
+     * @return
+     */
+    CmsPage findById(String id);
+
+    /**
+     * 根据ID删除页眉
+     * @param id
+     * @return
+     */
+    void delete(String id);
 }
