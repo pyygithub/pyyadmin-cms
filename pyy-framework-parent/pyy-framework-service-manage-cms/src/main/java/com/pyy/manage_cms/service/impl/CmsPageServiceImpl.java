@@ -33,7 +33,7 @@ public class CmsPageServiceImpl implements CmsPageService{
     private CmsPageRepository cmsPageRepository;
 
     @Override
-    public QueryResult findList(int page, int size, QueryPageRequest queryPageRequest) {
+    public QueryResult<CmsPage> findList(int page, int size, QueryPageRequest queryPageRequest) {
         if(queryPageRequest == null){
             queryPageRequest = new QueryPageRequest();
         }
@@ -67,7 +67,7 @@ public class CmsPageServiceImpl implements CmsPageService{
         }
         Pageable pageable = PageRequest.of(page,size);
         Page<CmsPage> all = cmsPageRepository.findAll(example,pageable);//实现自定义条件查询并且分页查询
-        QueryResult queryResult = new QueryResult();
+        QueryResult<CmsPage> queryResult = new QueryResult();
         queryResult.setList(all.getContent());//数据列表
         queryResult.setTotal(all.getTotalElements());//数据总记录数
         return queryResult;

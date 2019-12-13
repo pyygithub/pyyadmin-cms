@@ -53,14 +53,14 @@ export const constantRoutes = [
       {
         path: '/cms/site/list',
         name: '站点管理',
-        component: () => import('@/views/cms/site/site_list.vue'),
-        meta: { title: '站点管理', icon: 'table' }
+        component: () => import('@/views/cms/site/index.vue'),
+        meta: { title: '站点管理', icon: 'site' }
       },
       {
         path: '/cms/page/list',
         name: '页面管理',
         component: () => import('@/views/cms/page/index.vue'),
-        meta: { title: '页面管理', icon: 'table' }
+        meta: { title: '页面管理', icon: 'page' }
       }
     ]
   },

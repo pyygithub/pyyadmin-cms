@@ -4,6 +4,8 @@ import com.pyy.framework.domain.cms.CmsSite;
 import com.pyy.framework.domain.cms.request.QuerySiteRequest;
 import com.pyy.framework.model.response.QueryResult;
 
+import java.util.List;
+
 /**
  * ========================
  * 站点service接口
@@ -14,14 +16,22 @@ import com.pyy.framework.model.response.QueryResult;
  * ========================
  */
 public interface CmsSiteService {
+
+    /**
+     * 站点列表查询
+     * @param querySiteRequest
+     * @return
+     */
+    List<CmsSite> findList(QuerySiteRequest querySiteRequest) ;
+
     /**
      * 站点列表分页查询
-     * @param site
+     * @param page
      * @param size
      * @param querySiteRequest
      * @return
      */
-    QueryResult findList(int site, int size, QuerySiteRequest querySiteRequest) ;
+    QueryResult<CmsSite> findList(int page, int size, QuerySiteRequest querySiteRequest) ;
 
     /**
      * 添加站点

@@ -4,7 +4,7 @@ import com.pyy.framework.model.response.ResultCode;
 import lombok.ToString;
 
 /**
- * Created by mrt on 2018/3/5.
+ * CMS响应码
  */
 @ToString
 public enum CmsCode implements ResultCode {
@@ -18,7 +18,7 @@ public enum CmsCode implements ResultCode {
     CMS_COURSE_PERVIEWISNULL(false,24007,"预览页面为空！"),
 
     CMS_ADDSITE_EXISTSNAME(false,25001,"站点名称已存在！"),
-    CMS_SITE_NOT_FOUND(false,24006,"页面数据未找到！");
+    CMS_SITE_NOT_FOUND(false,24006,"站点数据未找到！");
     //操作代码
     boolean success;
     //操作代码

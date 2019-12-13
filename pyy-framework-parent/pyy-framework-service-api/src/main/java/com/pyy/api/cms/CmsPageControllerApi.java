@@ -2,7 +2,7 @@ package com.pyy.api.cms;
 
 import com.pyy.framework.domain.cms.CmsPage;
 import com.pyy.framework.domain.cms.request.QueryPageRequest;
-import com.pyy.framework.model.response.QueryResponseResult;
+import com.pyy.framework.model.response.QueryResult;
 import com.pyy.framework.model.response.ResponseResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -30,8 +30,8 @@ public interface CmsPageControllerApi {
             @ApiImplicitParam(name="page",value = "页码", required=true, paramType="path", dataType="int"),
             @ApiImplicitParam(name="size",value = "每页记录数", required=true, paramType="path", dataType="int")
     })
-    @GetMapping("/page/list/{page}/{size}")
-    QueryResponseResult findList(@Valid @PathVariable("page")int page, @PathVariable("size")int size, QueryPageRequest queryPageRequest) ;
+    @GetMapping("/pages/{page}/{size}")
+    ResponseResult<QueryResult<CmsPage>> findList(@Valid @PathVariable("page")int page, @PathVariable("size")int size, QueryPageRequest queryPageRequest) ;
 
     @ApiOperation("添加页面")
     @PostMapping("/page")

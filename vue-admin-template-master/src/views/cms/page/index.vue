@@ -14,7 +14,7 @@
         <el-button type="primary" @click.prevent="handleQuery" icon="el-icon-search">查询</el-button>
       </el-form-item>
       <!-- 新增页面按钮 -->
-      <el-button @click.prevent="handleAdd" type="primary"  size="small" icon="el-icon-plus">新增页面</el-button>
+      <el-button @click.prevent="handleAdd" type="primary" size="small" icon="el-icon-plus">新增页面</el-button>
     </el-form>
 
     <!-- 页面列表 -->
@@ -31,7 +31,7 @@
       <el-table-column prop="pagePhysicalPath" label="物理路径"/>
       <el-table-column prop="pageCreateTime" label="创建时间" width="180">
         <template slot-scope="scope">
-          <span>{{ scope.row.pageCreateTime | date-format}}</span>
+          <span>{{ scope.row.pageCreateTime | date - format}}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center">
@@ -60,12 +60,13 @@
     </el-pagination>
 
     <!-- 新增页面 -->
-    <add-modal ref="addModel" ></add-modal>
+    <add-modal ref="addModel"></add-modal>
   </div>
 </template>
 
 <script>
   import * as cmsPageAPI from '../../../api/cms/page/index'
+  import * as cmsSiteAPI from '../../../api/cms/site/index'
   import addModal from './pageModel.vue'
   export default {
     data() {
@@ -88,18 +89,14 @@
       // 默认查询页面
       this.handleQuery()
       //初始化站点列表
-      this.siteList = [
-          {
-            siteId:'5a751fab6abb5044e0d19ea1',
-            siteName:'门户主站'
-          },
-          {
-            siteId:'102',
-            siteName:'测试站'
-          }
-      ]
+      this.handlerQuerySiteList()
     },
     methods: {
+      // 查询站点列表
+      async handlerQuerySiteList () {
+        const result = await cmsSiteAPI.getSiteList(this.params)
+        this.siteList = result.data
+      },
       // 查询
       async handleQuery () {
         const result = await cmsPageAPI.getPageList(this.page, this.size, this.params)
@@ -120,13 +117,13 @@
           type: 'warning'
         }).then(async () => {
           // 执行异步删除
-          await cmsPageAPI.deltetPage(pageId)
+          await cmsPageAPI.deleteSite(pageId)
           this.$message({type: 'success', message: '删除成功!'});
           // 刷新列表
           this.handleQuery()
 
         }).catch(() => {
-          this.$message({ ype: 'info', message: '已取消删除'});
+          this.$message({ype: 'info', message: '已取消删除'});
         });
       },
       handleSizeChange(size) {

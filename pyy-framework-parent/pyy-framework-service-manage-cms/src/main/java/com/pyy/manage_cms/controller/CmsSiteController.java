@@ -4,12 +4,14 @@ import com.pyy.api.cms.CmsSiteControllerApi;
 import com.pyy.framework.domain.cms.CmsSite;
 import com.pyy.framework.domain.cms.request.QuerySiteRequest;
 import com.pyy.framework.model.response.CommonCode;
-import com.pyy.framework.model.response.QueryResponseResult;
 import com.pyy.framework.model.response.QueryResult;
 import com.pyy.framework.model.response.ResponseResult;
 import com.pyy.manage_cms.service.CmsSiteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
+import java.util.List;
 
 /**
  * ========================
@@ -27,27 +29,28 @@ public class CmsSiteController implements CmsSiteControllerApi {
     private CmsSiteService cmsSiteService;
 
     @Override
-    public QueryResponseResult findList(int page, int size, QuerySiteRequest querySiteRequest) {
-        QueryResult queryResult = cmsSiteService.findList(page, size, querySiteRequest);
-        return new QueryResponseResult(CommonCode.SUCCESS, queryResult);
+    public ResponseResult<List<CmsSite>> findList(@Valid QuerySiteRequest querySiteRequest) {
+        return ResponseResult.SUCCESS(cmsSiteService.findList(querySiteRequest));
+    }
+
+    @Override
+    public ResponseResult<QueryResult<CmsSite>> findList(int page, int size, QuerySiteRequest querySiteRequest) {
+        return ResponseResult.SUCCESS(cmsSiteService.findList(page, size, querySiteRequest));
     }
 
     @Override
     public ResponseResult<CmsSite> add(CmsSite cmsSite) {
-        cmsSite = cmsSiteService.add(cmsSite);
-        return ResponseResult.SUCCESS(cmsSite);
+        return ResponseResult.SUCCESS(cmsSiteService.add(cmsSite));
     }
 
     @Override
     public ResponseResult<CmsSite> findById(String id) {
-        CmsSite cmsSite = cmsSiteService.findById(id);
-        return ResponseResult.SUCCESS(cmsSite);
+        return ResponseResult.SUCCESS(cmsSiteService.findById(id));
     }
 
     @Override
     public ResponseResult<CmsSite> edit(String id, CmsSite cmsSite) {
-        cmsSite = cmsSiteService.update(id, cmsSite);
-        return ResponseResult.SUCCESS(cmsSite);
+        return ResponseResult.SUCCESS(cmsSiteService.update(id, cmsSite));
     }
 
     @Override

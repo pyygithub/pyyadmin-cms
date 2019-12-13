@@ -4,7 +4,6 @@ import com.pyy.api.cms.CmsPageControllerApi;
 import com.pyy.framework.domain.cms.CmsPage;
 import com.pyy.framework.domain.cms.request.QueryPageRequest;
 import com.pyy.framework.model.response.CommonCode;
-import com.pyy.framework.model.response.QueryResponseResult;
 import com.pyy.framework.model.response.QueryResult;
 import com.pyy.framework.model.response.ResponseResult;
 import com.pyy.manage_cms.service.CmsPageService;
@@ -27,27 +26,23 @@ public class CmsPageController implements CmsPageControllerApi {
     private CmsPageService cmsPageService;
 
     @Override
-    public QueryResponseResult findList(int page, int size, QueryPageRequest queryPageRequest) {
-        QueryResult queryResult = cmsPageService.findList(page, size, queryPageRequest);
-        return new QueryResponseResult(CommonCode.SUCCESS, queryResult);
+    public ResponseResult<QueryResult<CmsPage>> findList(int page, int size, QueryPageRequest queryPageRequest) {
+        return ResponseResult.SUCCESS(cmsPageService.findList(page, size, queryPageRequest));
     }
 
     @Override
     public ResponseResult<CmsPage> add(CmsPage cmsPage) {
-        cmsPage = cmsPageService.add(cmsPage);
-        return ResponseResult.SUCCESS(cmsPage);
+        return ResponseResult.SUCCESS(cmsPageService.add(cmsPage));
     }
 
     @Override
     public ResponseResult<CmsPage> findById(String id) {
-        CmsPage cmsPage = cmsPageService.findById(id);
-        return ResponseResult.SUCCESS(cmsPage);
+        return ResponseResult.SUCCESS(cmsPageService.findById(id));
     }
 
     @Override
     public ResponseResult<CmsPage> edit(String id, CmsPage cmsPage) {
-        cmsPage = cmsPageService.update(id, cmsPage);
-        return ResponseResult.SUCCESS(cmsPage);
+        return ResponseResult.SUCCESS(cmsPageService.update(id, cmsPage));
     }
 
     @Override

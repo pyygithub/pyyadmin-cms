@@ -3,7 +3,7 @@
     :title="title"
     :visible.sync="visible"
     @close="resetForm"
-    :wrapperClosable="false" ref="pageDrawer">
+    :wrapperClosable="false" ref="pageDrawer" size="30%">
     <div class="model-content">
       <el-form :model="pageForm" :rules="pageFormRules" ref="pageForm" label-width="80px" size="small">
         <el-form-item label="所属站点" prop="siteId">
@@ -52,6 +52,7 @@
 
 <script type="text/ecmascript-6">
   import * as cmsPageAPI from '../../../api/cms/page/index'
+  import * as cmsSiteAPI from '../../../api/cms/site/index'
 
   export default {
     name: 'addModal',
@@ -64,6 +65,9 @@
         siteList: [],
         // 模版列表
         templateList: [],
+        siteParams: {
+          siteName: '',// 站点名称
+        },
         // 新增界面数据
         pageForm: {
           pageId: '',
@@ -88,30 +92,28 @@
       }
     },
     created () {
-      //初始化站点列表
-      this.siteList = [
+      //模板列表
+      this.templateList = [
         {
-          siteId: '5a751fab6abb5044e0d19ea1',
-          siteName: '门户主站'
+          templateId: '5a962b52b00ffc514038faf7',
+          templateName: '首页'
         },
         {
-          siteId: '102',
-          siteName: '测试站'
+          templateId: '5a962bf8b00ffc514038fafa',
+          templateName: '轮播图'
         }
-      ],
-        //模板列表
-        this.templateList = [
-          {
-            templateId: '5a962b52b00ffc514038faf7',
-            templateName: '首页'
-          },
-          {
-            templateId: '5a962bf8b00ffc514038fafa',
-            templateName: '轮播图'
-          }
-        ]
+      ]
+    },
+    mounted () {
+      //初始化站点列表
+      this.handlerQuerySiteList()
     },
     methods: {
+      // 查询站点列表
+      async handlerQuerySiteList () {
+        const result = await cmsSiteAPI.getSiteList(this.siteParams)
+        this.siteList = result.data
+      },
       // 打开添加对话框
       openAdd () {
         this.visible = true

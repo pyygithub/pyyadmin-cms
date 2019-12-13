@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -33,7 +34,28 @@ public class CmsSiteServiceImpl implements CmsSiteService{
     private CmsSiteRepository cmsSiteRepository;
 
     @Override
-    public QueryResult findList(int page, int size, QuerySiteRequest querySiteRequest) {
+    public List<CmsSite> findList(QuerySiteRequest querySiteRequest) {
+        if(querySiteRequest == null){
+            querySiteRequest = new QuerySiteRequest();
+        }
+        //自定义条件查询
+        //定义条件匹配器
+        ExampleMatcher exampleMatcher = ExampleMatcher.matching()
+                .withMatcher("siteName", ExampleMatcher.GenericPropertyMatchers.contains());
+        //条件值对象
+        CmsSite cmsSite = new CmsSite();
+        //设置条件值（站点名称）
+        if(StringUtils.isNotEmpty(querySiteRequest.getSiteName())){
+            cmsSite.setSiteName(querySiteRequest.getSiteName());
+        }
+        //定义条件对象Example
+        Example<CmsSite> example = Example.of(cmsSite,exampleMatcher);
+        List<CmsSite> all = cmsSiteRepository.findAll(example);
+        return all;
+    }
+
+    @Override
+    public QueryResult<CmsSite> findList(int page, int size, QuerySiteRequest querySiteRequest) {
         if(querySiteRequest == null){
             querySiteRequest = new QuerySiteRequest();
         }
@@ -53,13 +75,13 @@ public class CmsSiteServiceImpl implements CmsSiteService{
         if(page <=0){
             page = 1;
         }
-        page = page -1;
+        page = page - 1;
         if(size<=0){
             size = 10;
         }
         Pageable pageable = PageRequest.of(page,size);
         Page<CmsSite> all = cmsSiteRepository.findAll(example, pageable);//实现自定义条件查询并且分页查询
-        QueryResult queryResult = new QueryResult();
+        QueryResult<CmsSite> queryResult = new QueryResult();
         queryResult.setList(all.getContent());//数据列表
         queryResult.setTotal(all.getTotalElements());//数据总记录数
         return queryResult;
@@ -85,19 +107,16 @@ public class CmsSiteServiceImpl implements CmsSiteService{
         CmsSite one = this.findById(id);
         if (one == null) {
             // 站点数据未找到，抛出异常
-            ExceptionCast.cast(CmsCode.CMS_PAGE_NOT_FOUND);
+            ExceptionCast.cast(CmsCode.CMS_SITE_NOT_FOUND);
         }
-
-        one.setSiteId();
-        one.setSiteName();
-        one.setSiteDomain();
-        one.setSitePort();
-        one.setSiteWebPath();
-        one.setSiteCreateTime();
-        // 校验站点是否存在，根据站点名称、站点ID、站点webpath查询
+        one.setSiteName(cmsSite.getSiteName());
+        one.setSiteDomain(cmsSite.getSiteDomain());
+        one.setSitePort(cmsSite.getSitePort());
+        one.setSiteWebPath(cmsSite.getSiteWebPath());
+        // 校验站点是否存在，根据站点名称查询
         CmsSite oldCmsSite = cmsSiteRepository.findBySiteName(cmsSite.getSiteName());
         if (oldCmsSite != null && !oldCmsSite.getSiteId().equals(id)) {
-            ExceptionCast.cast(CmsCode.CMS_ADDPAGE_EXISTSNAME);
+            ExceptionCast.cast(CmsCode.CMS_ADDSITE_EXISTSNAME);
         }
         // 执行更新
         CmsSite save = cmsSiteRepository.save(one);
@@ -122,7 +141,7 @@ public class CmsSiteServiceImpl implements CmsSiteService{
         CmsSite cmsSite = this.findById(id);
         if (cmsSite == null) {
             // 站点数据未找到，抛出异常
-            ExceptionCast.cast(CmsCode.CMS_PAGE_NOT_FOUND);
+            ExceptionCast.cast(CmsCode.CMS_ADDSITE_EXISTSNAME);
         }
         // 删除站点
         cmsSiteRepository.deleteById(id);
