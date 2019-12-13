@@ -3,6 +3,14 @@ server:
 spring:
   application:
     name: pyy-framework-service-manage-cms
+
+
+  servlet:
+    multipart:
+      #上传一个文件最大值  默认是1MB
+      max-file-size: 10MB
+      #上传多个文件最大值  默认是10MB
+      max-request-size: 100MB
   data:
     mongodb:
       uri:  mongodb://10.10.50.189:27017/pyy_cms

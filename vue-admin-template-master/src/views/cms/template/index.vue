@@ -1,39 +1,33 @@
 <template>
-  <div class="site-list">
+  <div class="template-list">
     <!-- 查询条件 -->
     <el-form :inline="true" :model="params" class="demo-form-inline" size="small">
-      <el-form-item label="站点名称">
-        <el-input v-model="params.siteName" placeholder="请输入站点名"></el-input>
+      <el-form-item label="页面模板名称">
+        <el-input v-model="params.templateName" placeholder="请输入模板名称"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click.prevent="handleQuery" icon="el-icon-search">查询</el-button>
       </el-form-item>
-      <!-- 新增站点按钮 -->
-      <el-button @click.prevent="handleAdd" type="primary"  size="small" icon="el-icon-plus">新增站点</el-button>
+      <!-- 新增页面模板按钮 -->
+      <el-button @click.prevent="handleAdd" type="primary"  size="small" icon="el-icon-plus">新增页面模板</el-button>
     </el-form>
 
-    <!-- 站点列表 -->
+    <!-- 页面模板列表 -->
     <el-table :data="list" style="width: 100%">
       <el-table-column type="index" label="序号" width="50"/>
-      <el-table-column prop="siteName" label="站点名称" width="200"/>
-      <el-table-column prop="siteDomain" label="站点域名" width="200"/>
-      <el-table-column prop="sitePort" label="站点端口" width="100"/>
-      <el-table-column prop="siteWebPath" label="站点访问地址"/>
-      <el-table-column prop="siteCreateTime" label="创建时间" width="180">
-        <template slot-scope="scope">
-          <span>{{ scope.row.siteCreateTime | date-format}}</span>
-        </template>
-      </el-table-column>
+      <el-table-column prop="templateName" label="模版名称"/>
+      <el-table-column prop="templateParameter" label="模版参数"/>
+      <el-table-column prop="templateFileId" label="模版文件ID" width="200"/>
       <el-table-column label="操作" align="center">
         <template slot-scope="scope">
           <el-button
             size="mini"
-            @click="handleEdit(scope.row.siteId)">编辑
+            @click="handleEdit(scope.row.templateId)">编辑
           </el-button>
           <el-button
             size="mini"
             type="danger"
-            @click="handleDelete(scope.row.siteId)">删除
+            @click="handleDelete(scope.row.templateId)">删除
           </el-button>
         </template>
       </el-table-column>
@@ -43,43 +37,43 @@
     <el-pagination @size-change="handleSizeChange"
                    @current-change="handleCurrentChange"
                    :current-page="currentPage"
-                   :page-sizes="[5, 10, 15, 30, 40]"
+                   :template-sizes="[5, 10, 15, 30, 40]"
                    :page-size="size"
                    layout="total, sizes, prev, pager, next, jumper"
                    :total="total" style="margin-top: 15px">
     </el-pagination>
 
-    <!-- 新增站点 -->
+    <!-- 新增页面模板 -->
     <add-modal ref="addModel" ></add-modal>
   </div>
 </template>
 
 <script>
-  import * as cmsSiteAPI from '../../../api/cms/site/index'
-  import addModal from './siteModel.vue'
+  import * as cmsTemplateAPI from '../../../api/cms/template/index'
+  import addModal from './templateModel.vue'
   export default {
     data() {
       return {
-        list: [], // 站点列表
+        list: [], // 页面模板列表
         total: 0,
         currentPage: 1,
         page: 1,//页码
         size: 5,//每页显示个数
         params: {
-          siteName: '',// 站点名称
+          templateName: '',// 页面模板名称
         },
 
-        isShowAddModal: false, // 新增站点Drawer显示状态
+        isShowAddModal: false, // 新增页面模板Drawer显示状态
       }
     },
     mounted () {
-      // 默认查询站点
+      // 默认查询页面模板
       this.handleQuery()
     },
     methods: {
       // 查询
       async handleQuery () {
-        const result = await cmsSiteAPI.getSitePageList(this.page, this.size, this.params)
+        const result = await cmsTemplateAPI.getTemplatePageList(this.page, this.size, this.params)
         const queryResult = result.data
         this.total = queryResult.total
         this.list = queryResult.list
@@ -88,16 +82,16 @@
         this.$refs.addModel.title = '新增'
         this.$refs.addModel.openAdd()
       },
-      handleEdit (siteId) {
+      handleEdit (templateId) {
         this.$refs.addModel.title = '编辑'
-        this.$refs.addModel.openEdit(siteId)
+        this.$refs.addModel.openEdit(templateId)
       },
-      handleDelete (siteId) {
+      handleDelete (templateId) {
         this.$confirm('此操作将永久删除该数据, 是否继续?', '提示', {
           type: 'warning'
         }).then(async () => {
           // 执行异步删除
-          await cmsSiteAPI.deleteSite(siteId)
+          await cmsTemplateAPI.deleteTemplate(templateId)
           this.$message({type: 'success', message: '删除成功!'});
           // 刷新列表
           this.handleQuery()
@@ -108,7 +102,7 @@
       },
       handleSizeChange(size) {
         console.log(`每页 ${size} 条`);
-        this._changePage(this.site, size)
+        this._changePage(this.template, size)
       },
       handleCurrentChange(page) {
         console.log(`当前页: ${page}`);

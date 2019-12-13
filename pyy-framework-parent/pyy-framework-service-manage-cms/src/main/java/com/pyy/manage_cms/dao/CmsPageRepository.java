@@ -5,15 +5,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-/**
- * ========================
- * 页面DAO接口
- * Created with IntelliJ IDEA.
- * User：pyy
- * Date：2019/12/10 15:43
- * Version: v1.0
- * ========================
- */
 public interface CmsPageRepository extends MongoRepository<CmsPage, String>{
 
     /**

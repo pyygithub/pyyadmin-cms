@@ -120,9 +120,6 @@
             this.handleCancel()
             // 刷新查询
             this.$parent.handleQuery()
-          } else {
-            this.$notify({ title: '失败', message: '提交站点', type: 'error'});
-            return false;
           }
         });
       }

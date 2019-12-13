@@ -14,13 +14,13 @@ import javax.validation.Valid;
 import java.util.List;
 
 /**
- * ========================
- * Cms站点查询接口
- * Created with IntelliJ IDEA.
- * User：pyy
- * Date：2019/12/10 14:57
- * Version: v1.0
- * ========================
+ * ---------------------------
+ * CMS站点查询接口
+ * ---------------------------
+ * 作者：  pyy
+ * 时间：  2019-12-10 11:30:05
+ * 版本：  v1.0
+ * ---------------------------
  */
 @Api(value="cms站点管理接口",description = "cms站点管理接口，提供站点的增、删、改、查")
 @RequestMapping("/cms")
@@ -32,7 +32,7 @@ public interface CmsSiteControllerApi {
 
     @ApiOperation("分页查询站点列表")
     @ApiImplicitParams({
-            @ApiImplicitParam(name="site",value = "页码", required=true, paramType="path", dataType="int"),
+            @ApiImplicitParam(name="page",value = "页码", required=true, paramType="path", dataType="int"),
             @ApiImplicitParam(name="size",value = "每页记录数", required=true, paramType="path", dataType="int")
     })
     @GetMapping("/sites/{page}/{size}")

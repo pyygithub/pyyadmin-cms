@@ -17,15 +17,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * ========================
- * 站点service实现类
- * Created with IntelliJ IDEA.
- * User：pyy
- * Date：2019/12/10 16:02
- * Version: v1.0
- * ========================
- */
 @Service
 @Slf4j
 public class CmsSiteServiceImpl implements CmsSiteService{
@@ -55,7 +46,7 @@ public class CmsSiteServiceImpl implements CmsSiteService{
     }
 
     @Override
-    public QueryResult<CmsSite> findList(int page, int size, QuerySiteRequest querySiteRequest) {
+    public QueryResult<CmsSite>                                                                                                                                                                                           findList(int page, int size, QuerySiteRequest querySiteRequest) {
         if(querySiteRequest == null){
             querySiteRequest = new QuerySiteRequest();
         }

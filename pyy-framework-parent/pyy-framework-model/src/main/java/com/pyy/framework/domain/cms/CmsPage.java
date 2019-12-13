@@ -26,7 +26,7 @@ public class CmsPage {
     @NotBlank(message = "站点不能为空")
     private String siteId;
     //页面名称
-    @NotBlank(message = "站点不能为空")
+    @NotBlank(message = "页面不能为空")
     private String pageName;
     //别名
     private String pageAliase;

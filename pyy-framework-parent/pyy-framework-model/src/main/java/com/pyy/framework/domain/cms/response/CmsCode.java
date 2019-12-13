@@ -8,6 +8,7 @@ import lombok.ToString;
  */
 @ToString
 public enum CmsCode implements ResultCode {
+    CMS_TEMPLATEFILE_UPLOAD_ERROR(false,23001,"页面模板文件上传失败！"),
     CMS_ADDPAGE_EXISTSNAME(false,24001,"页面名称已存在！"),
     CMS_GENERATEHTML_DATAURLISNULL(false,24002,"从页面信息中找不到获取数据的url！"),
     CMS_GENERATEHTML_DATAISNULL(false,24003,"根据页面的数据url获取不到数据！"),
@@ -17,8 +18,9 @@ public enum CmsCode implements ResultCode {
     CMS_PAGE_NOT_FOUND(false,24006,"页面数据未找到！"),
     CMS_COURSE_PERVIEWISNULL(false,24007,"预览页面为空！"),
 
+
     CMS_ADDSITE_EXISTSNAME(false,25001,"站点名称已存在！"),
-    CMS_SITE_NOT_FOUND(false,24006,"站点数据未找到！");
+    CMS_SITE_NOT_FOUND(false,26006,"站点数据未找到！");
     //操作代码
     boolean success;
     //操作代码

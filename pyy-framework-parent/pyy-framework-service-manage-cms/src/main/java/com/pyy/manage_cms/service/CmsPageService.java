@@ -4,15 +4,6 @@ import com.pyy.framework.domain.cms.CmsPage;
 import com.pyy.framework.domain.cms.request.QueryPageRequest;
 import com.pyy.framework.model.response.QueryResult;
 
-/**
- * ========================
- * 页面service接口
- * Created with IntelliJ IDEA.
- * User：pyy
- * Date：2019/12/10 16:02
- * Version: v1.0
- * ========================
- */
 public interface CmsPageService {
     /**
      * 页面列表分页查询

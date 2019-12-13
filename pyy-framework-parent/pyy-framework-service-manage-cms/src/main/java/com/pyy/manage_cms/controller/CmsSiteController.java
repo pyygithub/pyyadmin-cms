@@ -14,13 +14,13 @@ import javax.validation.Valid;
 import java.util.List;
 
 /**
- * ========================
- * 站点Controller
- * Created with IntelliJ IDEA.
- * User：pyy
- * Date：2019/12/10 15:33
- * Version: v1.0
- * ========================
+ * ---------------------------
+ * CMS站点管理Controller
+ * ---------------------------
+ * 作者：  pyy
+ * 时间：  2019-12-10 15:32:05
+ * 版本：  v1.0
+ * ---------------------------
  */
 @RestController
 public class CmsSiteController implements CmsSiteControllerApi {

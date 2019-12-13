@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 /**
- * ========================
- * Cms页面查询接口
- * Created with IntelliJ IDEA.
- * User：pyy
- * Date：2019/12/10 14:57
- * Version: v1.0
- * ========================
+ * ---------------------------
+ * CMS页面查询接口
+ * ---------------------------
+ * 作者：  pyy
+ * 时间：  2019-12-13 14:30:05
+ * 版本：  v1.0
+ * ---------------------------
  */
 @Api(value="cms页面管理接口",description = "cms页面管理接口，提供页面的增、删、改、查")
 @RequestMapping("/cms")

@@ -6,15 +6,6 @@ import com.pyy.framework.model.response.QueryResult;
 
 import java.util.List;
 
-/**
- * ========================
- * 站点service接口
- * Created with IntelliJ IDEA.
- * User：pyy
- * Date：2019/12/10 16:02
- * Version: v1.0
- * ========================
- */
 public interface CmsSiteService {
 
     /**

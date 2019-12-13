@@ -11,13 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * ========================
- * 页面Controller
- * Created with IntelliJ IDEA.
- * User：pyy
- * Date：2019/12/10 15:33
- * Version: v1.0
- * ========================
+ * ---------------------------
+ * CMS页面管理Controller
+ * ---------------------------
+ * 作者：  pyy
+ * 时间：  2019-12-10 15:32:05
+ * 版本：  v1.0
+ * ---------------------------
  */
 @RestController
 public class CmsPageController implements CmsPageControllerApi {

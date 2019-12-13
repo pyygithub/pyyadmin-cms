@@ -1,8 +1,18 @@
 <template>
   <section class="app-main">
-    <transition name="fade-transform" mode="out-in">
-      <router-view :key="key" />
-    </transition>
+    <div class="dashboard-header">
+      <!--<el-alert-->
+        <!--title="成功提示的文案"-->
+        <!--type="success"-->
+        <!--show-icon>-->
+      <!--</el-alert>-->
+    </div>
+    <div class="dashboard-editor-container">
+      <transition name="fade-transform" mode="out-in">
+        <router-view :key="key" />
+      </transition>
+    </div>
+
   </section>
 </template>
 
@@ -24,7 +34,10 @@ export default {
   width: 100%;
   position: relative;
   overflow: hidden;
-  padding: 30px;
+  padding-top: 50px;
+}
+.dashboard-editor-container {
+  padding: 18px 22px 22px;
 }
 .fixed-header+.app-main {
   padding-top: 50px;
