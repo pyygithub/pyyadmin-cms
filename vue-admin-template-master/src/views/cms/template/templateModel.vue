@@ -30,7 +30,6 @@
             <el-button size="small" type="primary">点击上传</el-button>
           </el-upload>
         </el-form-item>
-
       </el-form>
 
       <div slot="footer" class="dialog-footer" style="text-align: right">

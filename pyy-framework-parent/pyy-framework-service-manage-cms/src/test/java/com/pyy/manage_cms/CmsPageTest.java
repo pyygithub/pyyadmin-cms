@@ -2,6 +2,7 @@ package com.pyy.manage_cms;
 
 import com.pyy.framework.domain.cms.CmsPage;
 import com.pyy.manage_cms.dao.CmsPageRepository;
+import com.pyy.manage_cms.service.CmsPageService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,9 @@ public class CmsPageTest {
     @Autowired
     private CmsPageRepository cmsPageRepository;
 
+    @Autowired
+    private CmsPageService cmsPageService;
+
     @Test
     public void testFindPage() {
         int page = 0;
@@ -33,5 +37,10 @@ public class CmsPageTest {
         Pageable pageable = PageRequest.of(page, size);
 
         Page<CmsPage> all = cmsPageRepository.findAll(pageable);
+    }
+
+    @Test
+    public void testPageHtml() {
+        cmsPageService.getPageHtml("5df6f74fe77860184811b609");
     }
 }

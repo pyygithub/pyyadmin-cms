@@ -15,9 +15,9 @@
     <!-- 页面模板列表 -->
     <el-table :data="list" style="width: 100%">
       <el-table-column type="index" label="序号" width="50"/>
-      <el-table-column prop="templateName" label="模版名称"/>
+      <el-table-column prop="templateName" label="模版名称" />
       <el-table-column prop="templateParameter" label="模版参数"/>
-      <el-table-column prop="templateFileId" label="模版文件ID" width="200"/>
+      <el-table-column prop="templateFileId" label="模版文件ID"/>
       <el-table-column label="操作" align="center">
         <template slot-scope="scope">
           <el-button

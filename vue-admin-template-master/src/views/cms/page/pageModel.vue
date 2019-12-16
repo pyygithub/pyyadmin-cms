@@ -56,6 +56,7 @@
 <script type="text/ecmascript-6">
   import * as cmsPageAPI from '../../../api/cms/page/index'
   import * as cmsSiteAPI from '../../../api/cms/site/index'
+  import * as cmsTemplateAPI from '../../../api/cms/template/index'
 
   export default {
     name: 'addModal',
@@ -70,6 +71,9 @@
         templateList: [],
         siteParams: {
           siteName: '',// 站点名称
+        },
+        templateParams: {
+          templateName: '',// 模板名称
         },
         // 新增界面数据
         pageForm: {
@@ -95,28 +99,23 @@
         }
       }
     },
-    created () {
-      //模板列表
-      this.templateList = [
-        {
-          templateId: '5a962b52b00ffc514038faf7',
-          templateName: '首页'
-        },
-        {
-          templateId: '5a962bf8b00ffc514038fafa',
-          templateName: '轮播图'
-        }
-      ]
-    },
+
     mounted () {
       //初始化站点列表
-      this.handlerQuerySiteList()
+      this.handleQuerySiteList()
+      //初始化模板列表
+      this.handleQueryTemplateList()
     },
     methods: {
       // 查询站点列表
-      async handlerQuerySiteList () {
+      async handleQuerySiteList () {
         const result = await cmsSiteAPI.getSiteList(this.siteParams)
         this.siteList = result.data
+      },
+      // 查询模板列表
+      async handleQueryTemplateList () {
+        const result = await cmsTemplateAPI.getTemplateList(this.templateParams)
+        this.templateList = result.data
       },
       // 打开添加对话框
       openAdd () {
@@ -141,6 +140,7 @@
               this.pageForm.pageParameter = cmsPage.pageParameter
               this.pageForm.pagePhysicalPath = cmsPage.pagePhysicalPath
               this.pageForm.pageType = cmsPage.pageType
+              this.pageForm.dataUrl = cmsPage.dataUrl
               this.pageForm.pageCreateTime = cmsPage.pageCreateTime
             }
           })
