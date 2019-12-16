@@ -4,7 +4,6 @@ import com.mongodb.client.gridfs.GridFSBucket;
 import com.mongodb.client.gridfs.GridFSDownloadStream;
 import com.mongodb.client.gridfs.model.GridFSFile;
 import com.pyy.cms_potal_client.dao.CmsPageRepository;
-import com.pyy.cms_potal_client.dao.CmsSiteRepository;
 import com.pyy.cms_potal_client.service.CmsPageService;
 import com.pyy.cms_potal_client.service.CmsSiteService;
 import com.pyy.framework.domain.cms.CmsPage;
@@ -12,6 +11,7 @@ import com.pyy.framework.domain.cms.CmsSite;
 import com.pyy.framework.domain.cms.response.CmsCode;
 import com.pyy.framework.exception.ExceptionCast;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -19,7 +19,6 @@ import org.springframework.data.mongodb.gridfs.GridFsResource;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.stereotype.Service;
 
-import javax.validation.constraints.NotBlank;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -74,10 +73,27 @@ public class CmsPageServiceImpl implements CmsPageService {
         }
 
         // 拼接页面物理路径
-        String pagePath = cmsSite.getSiteP
+        String pagePath = cmsSite.getSitePhysicalPath() + cmsPage.getPagePhysicalPath() + cmsPage.getPageName();
 
         FileOutputStream fileOutputStream = null;
-        fileOutputStream = new FileOutputStream(new File())
+        try {
+            fileOutputStream = new FileOutputStream(new File(pagePath));
+            // 将文件内容保存到服务物理路径
+            IOUtils.copy(inputStream,fileOutputStream);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                inputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                fileOutputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
     }
 
@@ -90,6 +106,15 @@ public class CmsPageServiceImpl implements CmsPageService {
             return gridFsResource.getInputStream();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public CmsPage findById(String id) {
+        Optional<CmsPage> optional = cmsPageRepository.findById(id);
+        if (optional.isPresent()) {
+            return optional.get();
         }
         return null;
     }

@@ -1,5 +1,7 @@
 package com.pyy.cms_potal_client.service;
 
+import com.pyy.framework.domain.cms.CmsPage;
+
 import java.io.InputStream;
 
 /**
@@ -24,4 +26,11 @@ public interface CmsPageService {
      * @return
      */
     InputStream getFileById(String fileId);
+
+    /**
+     * 根据ID查询页面
+     * @param id
+     * @return
+     */
+    CmsPage findById(String id);
 }
