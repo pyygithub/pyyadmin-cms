@@ -18,7 +18,7 @@
     </el-form>
 
     <!-- 页面列表 -->
-    <el-table :data="list" style="width: 100%">
+    <el-table border :data="list" style="width: 100%">
       <el-table-column type="index" label="序号" width="50"/>
       <el-table-column prop="pageName" label="页面名称" width="180"/>
       <el-table-column prop="pageAliase" label="别名" width="120"/>
@@ -34,17 +34,37 @@
           <span>{{ scope.row.pageCreateTime | date-format}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center">
+      <el-table-column label="操作" align="center" width="320">
         <template slot-scope="scope">
-          <el-button
-            size="mini"
-            @click="handleEdit(scope.row.pageId)">编辑
-          </el-button>
-          <el-button
-            size="mini"
-            type="danger"
-            @click="handleDelete(scope.row.pageId)">删除
-          </el-button>
+          <el-button-group>
+            <el-button
+              size="small"
+              type="info"
+              @click="handlePreview(scope.row.pageId)">
+              <svg-icon icon-class="preview"/>
+              预览
+            </el-button>
+            <el-button
+              size="small"
+              icon="el-icon-edit"
+              type="primary"
+              @click="handleEdit(scope.row.pageId)">修改
+            </el-button>
+            <el-button
+              size="small"
+              icon="el-icon-delete"
+              type="danger"
+              @click="handleDelete(scope.row.pageId)">删除
+            </el-button>
+
+            <el-button
+              size="small"
+              type="success"
+              @click="handleDelete(scope.row.pageId)">
+              <svg-icon icon-class="release"/>
+              发布
+            </el-button>
+          </el-button-group>
         </template>
       </el-table-column>
     </el-table>
@@ -97,21 +117,28 @@
         const result = await cmsSiteAPI.getSiteList(this.params)
         this.siteList = result.data
       },
-      // 查询
+      // 页面查询
       async handleQuery () {
         const result = await cmsPageAPI.getPageList(this.page, this.size, this.params)
         const queryResult = result.data
         this.total = queryResult.total
         this.list = queryResult.list
       },
+      // 页面新增
       handleAdd () {
         this.$refs.addModel.title = '新增'
         this.$refs.addModel.openAdd()
       },
+      // 页面预览
+      handlePreview (pageId) {
+        window.open("http://www.xuecheng.com/cms/preview/" + pageId)
+      },
+      // 页面编辑
       handleEdit (pageId) {
         this.$refs.addModel.title = '编辑'
         this.$refs.addModel.openEdit(pageId)
       },
+      // 页面删除
       handleDelete (pageId) {
         this.$confirm('此操作将永久删除该数据, 是否继续?', '提示', {
           type: 'warning'

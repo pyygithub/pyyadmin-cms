@@ -1,0 +1,23 @@
+server:
+  port: 31000
+spring:
+  application:
+    name: pyy-framework-service-cms-portal-client
+
+  data:
+    mongodb:
+      uri:  mongodb://10.10.50.189:27017
+      database: pyy_cms
+
+  rabbitmq:
+    host: 10.10.50.230
+    port: 5672
+    username: admin
+    password: 123456
+    virtual-host: /
+
+cms:
+  mq:
+    #cms客户端监控的队列名称（不同的客户端监控的队列不能重复）
+    queue: queue_cms_postpage_01
+    routingKey: 5df2e75548b7e64b14d639f3 #此routingKey为门户站点ID
