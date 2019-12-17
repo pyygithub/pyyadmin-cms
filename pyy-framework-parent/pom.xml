@@ -10,6 +10,7 @@
         <module>pyy-framework-service-api</module>
         <module>pyy-framework-service-manage-cms</module>
         <module>pyy-framework-service-cms-portal-client</module>
+        <module>pyy-framework-service-generater</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>

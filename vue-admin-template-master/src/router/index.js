@@ -71,16 +71,30 @@ export const constantRoutes = [
       }
     ]
   },
-
   {
-    path: '/form',
+    path: '/generate',
     component: Layout,
+    redirect: '/generate/dataSource',
+    name: '代码生成',
+    meta: { title: '代码生成', icon: 'code_generate' },
     children: [
       {
-        path: 'index',
-        name: 'Form',
-        component: () => import('@/views/form/index'),
-        meta: { title: 'Form', icon: 'form' }
+        path: '/generate/dataSource',
+        name: '数据源配置',
+        component: () => import('@/views/generate/dataSource/index.vue'),
+        meta: { title: '数据源配置', icon: 'ds' }
+      },
+      {
+        path: '/generate/singleTable',
+        name: '单表查询',
+        component: () => import('@/views/generate/singleTable/index.vue'),
+        meta: { title: '单表查询', icon: 'single_table' }
+      },
+      {
+        path: '/generate/multiTable',
+        name: '多表表查询',
+        component: () => import('@/views/generate/multiTable/index.vue'),
+        meta: { title: '多表表查询', icon: 'multi_table' }
       }
     ]
   },
