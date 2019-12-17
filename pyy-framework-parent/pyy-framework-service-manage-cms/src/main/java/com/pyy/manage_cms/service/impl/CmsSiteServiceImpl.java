@@ -104,6 +104,7 @@ public class CmsSiteServiceImpl implements CmsSiteService{
         one.setSiteDomain(cmsSite.getSiteDomain());
         one.setSitePort(cmsSite.getSitePort());
         one.setSiteWebPath(cmsSite.getSiteWebPath());
+        one.setSitePhysicalPath(cmsSite.getSitePhysicalPath());
         // 校验站点是否存在，根据站点名称查询
         CmsSite oldCmsSite = cmsSiteRepository.findBySiteName(cmsSite.getSiteName());
         if (oldCmsSite != null && !oldCmsSite.getSiteId().equals(id)) {

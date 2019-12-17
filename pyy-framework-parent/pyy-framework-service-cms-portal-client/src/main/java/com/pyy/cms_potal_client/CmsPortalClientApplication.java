@@ -1,5 +1,6 @@
 package com.pyy.cms_potal_client;
 
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -18,4 +19,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 @ComponentScan(basePackages={"com.pyy.cms_potal_client"})//扫描本项目下的所有类
 @SpringBootApplication
 public class CmsPortalClientApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(CmsPortalClientApplication.class, args);
+    }
 }

@@ -60,7 +60,7 @@
             <el-button
               size="small"
               type="success"
-              @click="handleDelete(scope.row.pageId)">
+              @click="handlePostPage(scope.row.pageId)">
               <svg-icon icon-class="release"/>
               发布
             </el-button>
@@ -132,6 +132,16 @@
       // 页面预览
       handlePreview (pageId) {
         window.open("http://www.xuecheng.com/cms/preview/" + pageId)
+      },
+      // 页面发布
+      handlePostPage (pageId) {
+        this.$confirm('确认发布该页面吗？', '提示', {}).then(async (res) => {
+          await cmsPageAPI.postPage(pageId)
+          this.$message.success('发布成功，请稍后查看结果');
+        }).
+        catch(() => {
+
+        })
       },
       // 页面编辑
       handleEdit (pageId) {

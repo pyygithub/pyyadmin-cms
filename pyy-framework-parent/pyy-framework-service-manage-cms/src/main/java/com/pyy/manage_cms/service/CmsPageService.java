@@ -3,6 +3,7 @@ package com.pyy.manage_cms.service;
 import com.pyy.framework.domain.cms.CmsPage;
 import com.pyy.framework.domain.cms.request.QueryPageRequest;
 import com.pyy.framework.model.response.QueryResult;
+import com.pyy.framework.model.response.ResponseResult;
 
 public interface CmsPageService {
     /**
@@ -49,4 +50,11 @@ public interface CmsPageService {
      * @return
      */
     String getPageHtml(String pageId);
+
+    /**
+     * 页面发布
+     * @param pageId
+     * @return
+     */
+    ResponseResult postPage(String pageId);
 }

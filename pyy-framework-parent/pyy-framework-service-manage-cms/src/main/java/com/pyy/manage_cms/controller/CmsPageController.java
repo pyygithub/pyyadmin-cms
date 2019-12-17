@@ -3,12 +3,11 @@ package com.pyy.manage_cms.controller;
 import com.pyy.api.cms.CmsPageControllerApi;
 import com.pyy.framework.domain.cms.CmsPage;
 import com.pyy.framework.domain.cms.request.QueryPageRequest;
-import com.pyy.framework.model.response.CommonCode;
 import com.pyy.framework.model.response.QueryResult;
 import com.pyy.framework.model.response.ResponseResult;
 import com.pyy.manage_cms.service.CmsPageService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * ---------------------------
@@ -49,5 +48,10 @@ public class CmsPageController implements CmsPageControllerApi {
     public ResponseResult delete(String id) {
         cmsPageService.delete(id);
         return ResponseResult.SUCCESS();
+    }
+
+    @Override
+    public ResponseResult postPage(String pageId) {
+        return cmsPageService.postPage(pageId);
     }
 }

@@ -48,4 +48,8 @@ public interface CmsPageControllerApi {
     @ApiOperation("删除页面")
     @DeleteMapping("/page/{id}")
     ResponseResult delete(@Valid @PathVariable("id") String id);
+
+    @ApiOperation("发布页面")
+    @PostMapping("/page/postPage/{pageId}")
+    ResponseResult postPage(@PathVariable("pageId") String pageId);
 }

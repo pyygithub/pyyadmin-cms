@@ -10,4 +10,6 @@ export const updatePage = (id, page) => createAPI(`/cms/page/${id}`, 'put', page
 
 export const deleteSite = (id) => createAPI(`/cms/page/${id}`, 'delete')
 
+export const postPage = (id) => createAPI(`/cms/page/postPage/${id}`, 'post')
+
 

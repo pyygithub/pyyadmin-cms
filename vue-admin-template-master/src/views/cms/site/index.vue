@@ -19,6 +19,7 @@
       <el-table-column prop="siteDomain" label="站点域名" width="200"/>
       <el-table-column prop="sitePort" label="站点端口" width="100"/>
       <el-table-column prop="siteWebPath" label="站点访问地址"/>
+      <el-table-column prop="sitePhysicalPath" label="站点物理地址"/>
       <el-table-column prop="siteCreateTime" label="创建时间" width="180">
         <template slot-scope="scope">
           <span>{{ scope.row.siteCreateTime | date-format}}</span>

@@ -19,6 +19,9 @@
         <el-form-item label="站点访问地址" prop="siteWebPath">
           <el-input v-model="siteForm.siteWebPath" auto-complete="off"></el-input>
         </el-form-item>
+        <el-form-item label="站点物理地址" prop="sitePhysicalPath">
+          <el-input v-model="siteForm.sitePhysicalPath" auto-complete="off"></el-input>
+        </el-form-item>
         <el-form-item label="创建时间">
           <el-date-picker type="datetime" placeholder="创建时间"
                           v-model="siteForm.siteCreateTime"></el-date-picker>
@@ -54,6 +57,7 @@
           siteDomain: '',
           sitePort: '',
           siteWebPath: '',
+          sitePhysicalPath: '',
           siteCreateTime: new Date()
         },
         // 验证规则
@@ -61,7 +65,8 @@
           siteName: [{required: true, message: '请输入站点名称', trigger: 'blur'}],
           siteDomain: [{required: true, message: '请输入站点域名', trigger: 'blur'}],
           sitePort: [{required: true, message: '请输入站点端口', trigger: 'blur'}],
-          siteWebPath: [{required: true, message: '请输入访问路径', trigger: 'blur'}]
+          siteWebPath: [{required: true, message: '请输入访问路径', trigger: 'blur'}],
+          sitePhysicalPath: [{required: true, message: '请输入物理路径', trigger: 'blur'}]
         }
       }
     },
@@ -81,14 +86,12 @@
             if (res.success) {
               const cmsSite = res.data
               this.siteForm.siteId = cmsSite.siteId
-              this.siteForm.siteId = cmsSite.siteId
               this.siteForm.templateId = cmsSite.templateId
               this.siteForm.siteName = cmsSite.siteName
-              this.siteForm.siteAliase = cmsSite.siteAliase
+              this.siteForm.siteDomain = cmsSite.siteDomain
+              this.siteForm.sitePort = cmsSite.sitePort
               this.siteForm.siteWebPath = cmsSite.siteWebPath
-              this.siteForm.siteParameter = cmsSite.siteParameter
               this.siteForm.sitePhysicalPath = cmsSite.sitePhysicalPath
-              this.siteForm.siteType = cmsSite.siteType
               this.siteForm.siteCreateTime = cmsSite.siteCreateTime
             }
           })
