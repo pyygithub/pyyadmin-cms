@@ -5,6 +5,9 @@
       <el-form-item label="数据源名称">
         <el-input v-model="params.dbName" placeholder="请输入数据源名称"></el-input>
       </el-form-item>
+      <el-form-item label="用户名">
+        <el-input v-model="params.username" placeholder="请输入用户名"></el-input>
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click.prevent="handleQuery" icon="el-icon-search">查询</el-button>
       </el-form-item>
@@ -14,27 +17,27 @@
 
     <!-- 数据源列表 -->
     <el-table :data="list" style="width: 100%">
-      <el-table-column type="index" label="序号" width="50"/>
+      <el-table-column type="index" label="序号" width="80"/>
       <el-table-column prop="dbType" label="类型" width="200"/>
       <el-table-column prop="host" label="主机地址" width="200"/>
       <el-table-column prop="port" label="端口" width="100"/>
       <el-table-column prop="username" label="用户名"/>
-      <el-table-column prop="dbName" label="数据库"/>
+      <el-table-column prop="dbName" label="数据库名称"/>
       <el-table-column prop="createTime" label="创建时间" width="180">
         <template slot-scope="scope">
-          <span>{{ scope.row.createTime | date-format}}</span>
+          <span>{{ scope.row.createTime | dateFormat}}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center">
         <template slot-scope="scope">
           <el-button
             size="mini"
-            @click="handleEdit(scope.row.dataSourceId)">编辑
+            @click="handleEdit(scope.row.id)">编辑
           </el-button>
           <el-button
             size="mini"
             type="danger"
-            @click="handleDelete(scope.row.dataSourceId)">删除
+            @click="handleDelete(scope.row.id)">删除
           </el-button>
         </template>
       </el-table-column>
@@ -56,7 +59,7 @@
 </template>
 
 <script>
-  import * as cmsSiteAPI from '../../../api/cms/site/index'
+  import * as generateDataSourceAPI from '../../../api/generate/dataSource/index'
   import addModal from './dataSourceModel.vue'
   export default {
     data() {
@@ -67,9 +70,9 @@
         page: 1,//页码
         size: 5,//每页显示个数
         params: {
+          username: '',// 数据库用户名
           dbName: '',// 数据源名称
         },
-
         isShowAddModal: false, // 新增数据源Drawer显示状态
       }
     },
@@ -80,7 +83,7 @@
     methods: {
       // 查询
       async handleQuery () {
-        const result = await cmsSiteAPI.getSitePageList(this.page, this.size, this.params)
+        const result = await generateDataSourceAPI.getDataSourceList(this.page, this.size, this.params)
         const queryResult = result.data
         this.total = queryResult.total
         this.list = queryResult.list
@@ -89,16 +92,16 @@
         this.$refs.addModel.title = '新增'
         this.$refs.addModel.openAdd()
       },
-      handleEdit (siteId) {
+      handleEdit (id) {
         this.$refs.addModel.title = '编辑'
-        this.$refs.addModel.openEdit(siteId)
+        this.$refs.addModel.openEdit(id)
       },
-      handleDelete (siteId) {
+      handleDelete (id) {
         this.$confirm('此操作将永久删除该数据, 是否继续?', '提示', {
           type: 'warning'
         }).then(async () => {
           // 执行异步删除
-          await cmsSiteAPI.deleteSite(siteId)
+          await generateDataSourceAPI.deleteDataSource(id)
           this.$message({type: 'success', message: '删除成功!'});
           // 刷新列表
           this.handleQuery()
@@ -109,7 +112,7 @@
       },
       handleSizeChange(size) {
         console.log(`每页 ${size} 条`);
-        this._changePage(this.site, size)
+        this._changePage(this.page, size)
       },
       handleCurrentChange(page) {
         console.log(`当前页: ${page}`);

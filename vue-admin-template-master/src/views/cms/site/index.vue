@@ -22,7 +22,7 @@
       <el-table-column prop="sitePhysicalPath" label="站点物理地址"/>
       <el-table-column prop="siteCreateTime" label="创建时间" width="180">
         <template slot-scope="scope">
-          <span>{{ scope.row.siteCreateTime | date-format}}</span>
+          <span>{{ scope.row.siteCreateTime | dateFormat}}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center">

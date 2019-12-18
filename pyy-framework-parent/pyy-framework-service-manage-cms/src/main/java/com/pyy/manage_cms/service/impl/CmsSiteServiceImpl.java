@@ -50,19 +50,19 @@ public class CmsSiteServiceImpl implements CmsSiteService{
         if(querySiteRequest == null){
             querySiteRequest = new QuerySiteRequest();
         }
-        //自定义条件查询
-        //定义条件匹配器
+        // 自定义条件查询
+        // 定义条件匹配器
         ExampleMatcher exampleMatcher = ExampleMatcher.matching()
                 .withMatcher("siteName", ExampleMatcher.GenericPropertyMatchers.contains());
-        //条件值对象
+        // 条件值对象
         CmsSite cmsSite = new CmsSite();
         //设置条件值（站点名称）
         if(StringUtils.isNotEmpty(querySiteRequest.getSiteName())){
             cmsSite.setSiteName(querySiteRequest.getSiteName());
         }
-        //定义条件对象Example
+        // 定义条件对象Example
         Example<CmsSite> example = Example.of(cmsSite,exampleMatcher);
-        //分页参数
+        // 分页参数
         if(page <=0){
             page = 1;
         }

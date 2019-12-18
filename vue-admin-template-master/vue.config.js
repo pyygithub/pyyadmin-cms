@@ -44,6 +44,13 @@ module.exports = {
         pathRewrite: {
           '^/api':'' //实际请求去掉/api
         }
+      },
+      '/api/generate': {
+        target: 'http://127.0.0.1:31002',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/api':'' //实际请求去掉/api
+        }
       }
     }
   },

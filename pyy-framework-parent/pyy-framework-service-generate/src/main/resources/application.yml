@@ -1,0 +1,24 @@
+server:
+  port: 31002
+spring:
+  application:
+    name: pyy-framework-service-generate
+  data:
+    mongodb:
+      uri: mongodb://10.10.50.189:27017
+      database: pyy_cms
+  rabbitmq:
+    host: 10.10.50.230
+    port: 5672
+    username: admin
+    password: 123456
+    virtual-host: /
+
+  jackson:
+    serialization:
+      write-dates-as-timestamps: true
+
+beetl:
+  templatesPath: templates
+
+

@@ -36,7 +36,7 @@
 
       <div slot="footer" class="dialog-footer" style="text-align: right">
         <el-button type="plain" size="small" @click="handleCancel">关闭</el-button>
-        <el-button type="primary" size="small" @click="handleSubmit">测试连接</el-button>
+        <el-button type="primary" size="small":loading="testLoading" @click="handleTestConnection">测试连接</el-button>
         <el-button type="primary" size="small" @click="handleSubmit">提交</el-button>
       </div>
     </div>
@@ -44,7 +44,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import * as cmsSiteAPI from '../../../api/cms/site/index'
+  import * as generateDataSourceAPI from '../../../api/generate/dataSource/index'
 
   export default {
     name: 'addModal',
@@ -76,7 +76,9 @@
           username: [{required: true, message: '请输入用户名', trigger: 'blur'}],
           password: [{required: true, message: '请输入密码', trigger: 'blur'}],
           dbName: [{required: true, message: '请输入数据库名称', trigger: 'blur'}],
-        }
+        },
+        testLoading: false, // 测试连接
+
       }
     },
     methods: {
@@ -90,7 +92,7 @@
         this.visible = true
         this.$nextTick(() => {
           // 异步查询
-          cmsSiteAPI.getSiteById(id).then(res => {
+          generateDataSourceAPI.getDataSourceById(id).then(res => {
             console.log(res)
             if (res.success) {
               const dataSource = res.data
@@ -115,17 +117,26 @@
         this.resetForm()
         this.$refs.dataSourceDrawer.closeDrawer()
       },
+      // 测试连接
+      async handleTestConnection () {
+       console.log('测试连接')
+        this.testLoading = true
+        await generateDataSourceAPI.testConnection(this.dataSourceForm);
+        this.$notify({ title: '成功',  message: '测试数据源连接',  type: 'success'});
+        this.testLoading = false
+      },
       // 提交
       handleSubmit () {
         // 表单验证
         this.$refs.dataSourceForm.validate(async (valid) => {
+          debugger
           if (valid) {
             if (!this.dataSourceForm.id) {
               // 异步添加
-              await cmsSiteAPI.addSite(this.dataSourceForm)
+              await generateDataSourceAPI.addDataSource(this.dataSourceForm)
             } else {
               // 异步修改
-              await cmsSiteAPI.updateSite(this.dataSourceForm.id, this.dataSourceForm)
+              await generateDataSourceAPI.updateDataSource(this.dataSourceForm.id, this.dataSourceForm)
             }
             this.$notify({ title: '成功',  message: '提交数据源',  type: 'success'});
             // 关闭对话框
