@@ -10,8 +10,8 @@
             </el-table-column>
         </el-table>
         <span slot="footer" class="dialog-footer">
-            <el-button size="small"  @click="visible = false">{{$t('action.cancel')}}</el-button>
-            <el-button size="small"  type="primary" @click="comfirm">{{$t('action.comfirm')}}</el-button>
+            <el-button size="small"  @click="visible = false">取消</el-button>
+            <el-button size="small"  type="primary" @click="comfirm">确定</el-button>
         </span>
 	</el-dialog>
 </template>

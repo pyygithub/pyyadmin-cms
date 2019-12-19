@@ -15,6 +15,10 @@ import lombok.Data;
  */
 @Data
 public class QueryDataSourceRequest extends RequestData {
+
+    @ApiModelProperty("数据源名称")
+    private String name;
+
     @ApiModelProperty("数据库用户名")
     private String username;
 

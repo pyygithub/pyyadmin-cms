@@ -3,7 +3,10 @@
     <!-- 查询条件 -->
     <el-form :inline="true" :model="params" class="demo-form-inline" size="small">
       <el-form-item label="数据源名称">
-        <el-input v-model="params.dbName" placeholder="请输入数据源名称"></el-input>
+        <el-input v-model="params.name" placeholder="请输入数据源名称"></el-input>
+      </el-form-item>
+      <el-form-item label="数据库名称">
+        <el-input v-model="params.dbName" placeholder="请输入数据库名称"></el-input>
       </el-form-item>
       <el-form-item label="用户名">
         <el-input v-model="params.username" placeholder="请输入用户名"></el-input>
@@ -18,6 +21,7 @@
     <!-- 数据源列表 -->
     <el-table :data="list" style="width: 100%">
       <el-table-column type="index" label="序号" width="80"/>
+      <el-table-column prop="name" label="数据源名称" width="200"/>
       <el-table-column prop="dbType" label="类型" width="200"/>
       <el-table-column prop="host" label="主机地址" width="200"/>
       <el-table-column prop="port" label="端口" width="100"/>
@@ -70,6 +74,7 @@
         page: 1,//页码
         size: 5,//每页显示个数
         params: {
+          name: '',// 数据源名称
           username: '',// 数据库用户名
           dbName: '',// 数据源名称
         },
@@ -83,7 +88,7 @@
     methods: {
       // 查询
       async handleQuery () {
-        const result = await generateDataSourceAPI.getDataSourceList(this.page, this.size, this.params)
+        const result = await generateDataSourceAPI.getDataSourcePageList(this.page, this.size, this.params)
         const queryResult = result.data
         this.total = queryResult.total
         this.list = queryResult.list

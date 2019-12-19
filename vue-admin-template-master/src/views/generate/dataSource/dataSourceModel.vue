@@ -7,6 +7,9 @@
 
     <div class="model-content">
       <el-form ref="dataSourceForm" :rules="dataSourceFormRules"  :model="dataSourceForm" label-width="100px" size="small">
+        <el-form-item label="数据源名称" prop="name">
+          <el-input v-model="dataSourceForm.name" type="text" placeholder="请输入数据源名称"></el-input>
+        </el-form-item>
         <el-form-item label="数据库类型" prop="dbType">
           <el-select v-model="dataSourceForm.dbType" placeholder="请选择数据库类型" style="width: 100%;">
             <el-option label="MySQL" value="MySQL"></el-option>
@@ -45,6 +48,7 @@
 
 <script type="text/ecmascript-6">
   import * as generateDataSourceAPI from '../../../api/generate/dataSource/index'
+  import * as generateAPI from '../../../api/generate/index'
 
   export default {
     name: 'addModal',
@@ -60,6 +64,7 @@
         // 新增界面数据
         dataSourceForm: {
           id: '',
+          name: '',
           dbType: '',
           host: '',
           port: '',
@@ -70,6 +75,7 @@
         },
         // 验证规则
         dataSourceFormRules: {
+          name: [{required: true, message: '请选择数据源名称', trigger: 'blur'}],
           dbType: [{required: true, message: '请选择数据源类型', trigger: 'blur'}],
           host: [{required: true, message: '请输入主机IP地址', trigger: 'blur'}],
           port: [{required: true, message: '请输入端口', trigger: 'blur'}],
@@ -97,6 +103,7 @@
             if (res.success) {
               const dataSource = res.data
               this.dataSourceForm.id = dataSource.id
+              this.dataSourceForm.name = dataSource.name
               this.dataSourceForm.dbType = dataSource.dbType
               this.dataSourceForm.host = dataSource.host
               this.dataSourceForm.port = dataSource.port
@@ -121,7 +128,7 @@
       async handleTestConnection () {
        console.log('测试连接')
         this.testLoading = true
-        await generateDataSourceAPI.testConnection(this.dataSourceForm);
+        await generateAPI.testConnection(this.dataSourceForm);
         this.$notify({ title: '成功',  message: '测试数据源连接',  type: 'success'});
         this.testLoading = false
       },

@@ -88,13 +88,7 @@ export const constantRoutes = [
         path: '/generate/singleTable',
         name: '单表查询',
         component: () => import('@/views/generate/singleTable/index.vue'),
-        meta: { title: '单表查询', icon: 'single_table' }
-      },
-      {
-        path: '/generate/multiTable',
-        name: '多表表查询',
-        component: () => import('@/views/generate/multiTable/index.vue'),
-        meta: { title: '多表表查询', icon: 'multi_table' }
+        meta: { title: '单表查询', icon: 'multi_table' }
       }
     ]
   },

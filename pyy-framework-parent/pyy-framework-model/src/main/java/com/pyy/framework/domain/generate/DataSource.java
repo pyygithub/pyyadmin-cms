@@ -13,6 +13,7 @@ import java.util.Date;
 public class DataSource {
     @Id
     private String id;
+    private String name;
     private String dbType;
     private String host;
     private String port;
