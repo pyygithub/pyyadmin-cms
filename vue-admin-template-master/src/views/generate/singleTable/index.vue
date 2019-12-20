@@ -35,7 +35,7 @@
 
     <div class="right-container">
       <div class="base-info">
-        <el-form ref="tableForm" class="tableForm" :model="tableModel" :inline="true" label-width="70px"
+        <el-form ref="tableForm" class="tableForm" :model="tableModel" :inline="true" label-width="80px"
                  size="small">
           <el-form-item label="表名">
             <el-input v-model="tableModel.name" :readonly="true" style="width: 260px !important;"></el-input>
@@ -43,17 +43,16 @@
           <el-form-item label="类名">
             <el-input v-model="tableModel.className" style="width: 220px !important;"></el-input>
           </el-form-item>
-          <el-form-item label="描述">
-            <el-input v-model="tableModel.description"></el-input>
+          <el-form-item label="描述" >
+            <el-input v-model="tableModel.description" style="width: 300px !important;"></el-input>
           </el-form-item>
         </el-form>
       </div>
       <div class="column-info">
         <el-table :data="tableModel.columns" class="right-table" size="mini" height="500" max-height="500" border>
           <el-table-column
-            label="序号"
             type="index"
-            width="50">
+            width="35">
           </el-table-column>
           <el-table-column prop="name" label="主键" width="35">
             <template slot-scope="scope">
@@ -62,12 +61,12 @@
               </span>
             </template>
           </el-table-column>
-          <el-table-column prop="name" label="字段名" width="160"></el-table-column>
-          <el-table-column prop="fieldName" label="属性名" width="200"></el-table-column>
+          <el-table-column prop="name" label="字段名" width="250"></el-table-column>
+          <el-table-column prop="fieldName" label="属性名" width="250"></el-table-column>
           <el-table-column prop="dataType" label="数据类型" width="150"></el-table-column>
-          <el-table-column prop="javaType" label="Java类型" width="150"></el-table-column>
+          <el-table-column prop="javaType" label="Java类型" width="100"></el-table-column>
           <el-table-column prop="length" label="长度" width="80"></el-table-column>
-          <el-table-column prop="precision" label="精度" width="50"></el-table-column>
+          <el-table-column prop="precision" label="精度" width="80"></el-table-column>
           <el-table-column prop="javaType" label="非空" width="50">
             <template slot-scope="scope">
               <span v-if="!scope.row.nullable" type="success">✔</span>
@@ -78,7 +77,7 @@
         </el-table>
       </div>
       <div class="option-info">
-        <el-form ref="optionForm" class="optionForm" :inline="true" label-width="100px"
+        <el-form ref="optionForm" class="optionForm" :inline="true" label-width="80px"
                  size="small">
           <span>
             <el-form-item label="作者">

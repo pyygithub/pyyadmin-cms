@@ -72,11 +72,32 @@ export const constantRoutes = [
     ]
   },
   {
+    path: '/teach',
+    component: Layout,
+    redirect: '/teach/course',
+    name: '教学管理',
+    meta: { title: '教学管理', icon: 'teach' },
+    children: [
+      {
+        path: '/teach/course',
+        name: '我的课程',
+        component: () => import('@/views/generate/dataSource/index.vue'),
+        meta: { title: '我的课程', icon: 'course' }
+      },
+      {
+        path: '/teach/media',
+        name: '我的媒资',
+        component: () => import('@/views/generate/singleTable/index.vue'),
+        meta: { title: '我的媒资', icon: 'media' }
+      }
+    ]
+  },
+  {
     path: '/generate',
     component: Layout,
     redirect: '/generate/dataSource',
-    name: '代码生成',
-    meta: { title: '代码生成', icon: 'code_generate' },
+    name: '代码生成器',
+    meta: { title: '代码生成器', icon: 'code_generate' },
     children: [
       {
         path: '/generate/dataSource',
@@ -86,9 +107,9 @@ export const constantRoutes = [
       },
       {
         path: '/generate/singleTable',
-        name: '单表查询',
+        name: '代码生成',
         component: () => import('@/views/generate/singleTable/index.vue'),
-        meta: { title: '单表查询', icon: 'multi_table' }
+        meta: { title: '代码生成', icon: 'multi_table' }
       }
     ]
   },
