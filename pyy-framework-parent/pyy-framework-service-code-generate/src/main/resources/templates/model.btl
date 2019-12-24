@@ -16,7 +16,7 @@ import javax.persistence.Table;
  */
 @Data
 @Table(name = "${table.name}")
-public class ${table.className} {
+public class ${table.className} extends CommonModel{
 
 <%
 	for(column in table.columns) {

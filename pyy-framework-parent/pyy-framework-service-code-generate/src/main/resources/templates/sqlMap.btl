@@ -34,17 +34,4 @@
     %>
   </sql>
 
-
-  <select id="selectByPageAndParam" parameterType="${table.voPackageName}.${table.className}QueryConditionVO" resultMap="BaseResultMap">
-    select
-    <include refid="Base_Column_List"/>
-    from ${table.name} a
-    where
-       a.is_deleted = 0
-       <if test="name != null">
-       <!-- 根据具体业务调整模糊查询条件 -->
-       and a.name like '%'||#{name}||'%'
-       </if>
-  </select>
-  
 </mapper>

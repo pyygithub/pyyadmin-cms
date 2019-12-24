@@ -26,8 +26,8 @@ public class GenerateServiceImpl implements GenerateService {
     public static final String TABLE = "table";
 
     public static final String TEMPLATE_MODEL = "/model.btl";
+    public static final String TEMPLATE_COMMON_MODEL = "/commonModel.btl";
     public static final String TEMPLATE_VO = "/listVO.btl";
-    public static final String TEMPLATE_COMMON_VO = "/commonVO.btl";
     public static final String TEMPLATE_QUERY_CONDITION_VO = "/queryConditionVO.btl";
     public static final String TEMPLATE_SAVE_UPDATE_VO = "/saveOrUpdateVO.btl";
     public static final String TEMPLATE_MAPPER = "/mapper.btl";
@@ -49,7 +49,7 @@ public class GenerateServiceImpl implements GenerateService {
     public static final String SQL_MAP_SUFFIX = "Mapper.xml";
     public static final String MODEL_SUFFIX = ".java";
     public static final String LIST_VO_SUFFIX = "VO.java";
-    public static final String COMMON_VO_SUFFIX = "CommonVO.java";
+    public static final String COMMON_MODEL_SUFFIX = "CommonModel.java";
     public static final String QUERY_CONDITION_VO_SUFFIX = "QueryConditionVO.java";
     public static final String SAVE_UPDATE_VO_SUFFIX = "SaveOrUpdateVO.java";
     public static final String MAPPER_SUFFIX = "Mapper.java";
@@ -147,8 +147,8 @@ public class GenerateServiceImpl implements GenerateService {
                 tableModel.setViewPackageName(getPakcageName(generateModel.getBasePackage(), PACKAGE_VIEW));
                 // generate model
                 generateModel(groupTemplate, tableModel, TEMPLATE_MODEL, generateModel.getOutPutFolderPath());
-                // generate commonVO
-                generateModel(groupTemplate, tableModel, TEMPLATE_COMMON_VO, generateModel.getOutPutFolderPath());
+                // generate commonModel
+                generateModel(groupTemplate, tableModel, TEMPLATE_COMMON_MODEL, generateModel.getOutPutFolderPath());
                 // generate queryConditionVO
                 generateModel(groupTemplate, tableModel, TEMPLATE_QUERY_CONDITION_VO, generateModel.getOutPutFolderPath());
                 // generate listVO
@@ -209,9 +209,9 @@ public class GenerateServiceImpl implements GenerateService {
         if(TEMPLATE_SAVE_UPDATE_VO.equals(templatePath)) {
             packageName = tableModel.getVoPackageName();
             suffix = SAVE_UPDATE_VO_SUFFIX;
-        } else if(TEMPLATE_COMMON_VO.equals(templatePath)) {
-            packageName = tableModel.getVoPackageName();
-            suffix = COMMON_VO_SUFFIX;
+        } else if(TEMPLATE_COMMON_MODEL.equals(templatePath)) {
+            packageName = tableModel.getModelPackageName();
+            suffix = COMMON_MODEL_SUFFIX;
         } else if(TEMPLATE_QUERY_CONDITION_VO.equals(templatePath)) {
             packageName = tableModel.getVoPackageName();
             suffix = QUERY_CONDITION_VO_SUFFIX;
@@ -244,7 +244,7 @@ public class GenerateServiceImpl implements GenerateService {
         }
 
         String filePath = outPutFolderPath + File.separator + tableModel.getClassName() + suffix;
-        if(TEMPLATE_COMMON_VO.equals(templatePath)) {
+        if(TEMPLATE_COMMON_MODEL.equals(templatePath)) {
             filePath = outPutFolderPath + File.separator + suffix;
         }
 

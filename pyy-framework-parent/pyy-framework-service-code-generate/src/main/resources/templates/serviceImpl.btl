@@ -46,18 +46,46 @@ public class ${table.className}ServiceImpl implements ${table.className}Service 
      */
 	@Override
 	public void save(${table.className}SaveOrUpdateVO ${table.objectName}SaveOrUpdateVO) {
-        // 保存${table.description}
-        ${table.className} ${table.objectName}Model = new ${table.className}();
-        BeanUtils.copyProperties(${table.objectName}SaveOrUpdateVO, ${table.objectName}Model);
-        ${table.objectName}Model.setId(SnowflakeId.getId() + "");
-        ${table.objectName}Model.setCreateId(UserUtil.getUserId());
-        ${table.objectName}Model.setCreateName(UserUtil.getUsername());
-        ${table.objectName}Model.setCreateTime(new Timestamp(System.currentTimeMillis()));
-        ${table.objectName}Model.setDeleteFlag(Constants.UN_DELETED);
-
-        ${table.objectName}Mapper.insert(${table.objectName}Model);
+        // 初始化Model对象
+        ${table.className} ${table.objectName} = new ${table.className}();
+        // 属性赋值
+        BeanUtils.copyProperties(${table.objectName}SaveOrUpdateVO, ${table.objectName});
+        ${table.objectName}.setId(null); // 确保ID为null，默认使用mybatis-plus ID生成策略
+        // 执行保存
+        int row = ${table.objectName}Mapper.insert(${table.objectName});
+        if (row != 1) {
+            ExceptionCast.cast(ResultCode.SAVE_ERROR, "${table.description}");
+        }
+        // 转换为VO对象
+        ${table.objectName}VO ${table.objectName}VO = new ${table.objectName}VO();
+        BeanUtils.copyProperties(${table.objectName}, ${table.objectName}VO);
         log.info("### ${table.description}保存成功 ###");
+        // 返回保存后结果
+        return ${table.objectName}VO;
 	}
+
+    /**
+     * ${table.description}删除
+     * @param id
+     */
+    @Override
+    public void delete(${table.primaryKey.javaType} id) {
+        // 参数校验
+        if (StringUtils.isBlank(id)) {
+           ExceptionCast.cast(ResultCode.PARAM_INVALID);
+        }
+        // 根据ID查询${table.description}
+        ${table.className} ${table.objectName} = ${table.objectName}Mapper.selectById(id);
+        if (${table.objectName}Model == null) {
+            ExceptionCast.cast(ResultCode.RESULT_DATA_NONE, "${table.description} id=" + id);
+        }
+        // 执行删除
+        int row = ${table.objectName}Mapper.deleteById(id);
+        if (row != 1) {
+           ExceptionCast.cast(ResultCode.DELETE_ERROR, "${table.description}");
+        }
+        log.info("### ${table.description}删除成功 ###");
+    }
 
 	/**
      * ${table.description}修改
@@ -66,44 +94,31 @@ public class ${table.className}ServiceImpl implements ${table.className}Service 
      */
     @Override
     public void update(${table.primaryKey.javaType} id, ${table.className}SaveOrUpdateVO ${table.objectName}SaveOrUpdateVO) {
-        // 1.根据ID查询${table.description}
-        ${table.className} ${table.objectName}Model = ${table.objectName}Mapper.selectByPrimaryKey(id);
-        if (${table.objectName}Model == null) {
+        // 参数校验
+        if (StringUtils.isBlank(id) || ${table.objectName}SaveOrUpdateVO == null) {
+           ExceptionCast.cast(ResultCode.PARAM_INVALID);
+        }
+        // 根据ID查询${table.description}
+        ${table.className} ${table.objectName} = ${table.objectName}Mapper.selectById(id);
+        if (${table.objectName} == null) {
             throw new CustomException(ResultCode.RESULT_DATA_NONE, "${table.description}");
         }
 
-        // 2.设置${table.description}属性
-        BeanUtils.copyProperties(${table.objectName}SaveOrUpdateVO, ${table.objectName}Model);
-        ${table.objectName}Model.setUpdateId(UserUtil.getUserId());
-        ${table.objectName}Model.setUpdateName(UserUtil.getUsername());
-        ${table.objectName}Model.setUpdateTime(new Timestamp(System.currentTimeMillis()));
-
-        // 3.更新${table.description}
-        ${table.objectName}Mapper.updateByPrimaryKey(${table.objectName}Model);
-        log.info("### ${table.description}修改成功 ###");
-    }
-
-   /**
-    * ${table.description}删除
-    * @param id
-    */
-	@Override
-	public void delete(${table.primaryKey.javaType} id, String userId, String username) {
-	    ${table.className} ${table.objectName}Model = ${table.objectName}Mapper.selectByPrimaryKey(id);
-        if (${table.objectName}Model == null) {
-            throw new CustomException(ResultCode.RESULT_DATA_NONE, "${table.description},id=" + id);
+        // 属性赋值
+        BeanUtils.copyProperties(${table.objectName}SaveOrUpdateVO, ${table.objectName});
+        user.setId(id);
+        // 执行修改
+        int row = ${table.objectName}Mapper.updateById(${table.objectName});
+        if (row != 1) {
+           ExceptionCast.cast(ResultCode.DELETE_ERROR, "${table.description}");
         }
-
-		// 逻辑删除
-        ${table.objectName}Model.setId(id);
-        ${table.objectName}Model.setUpdateId(userId);
-        ${table.objectName}Model.setUpdateName(username);
-        ${table.objectName}Model.setUpdateTime(new Timestamp(System.currentTimeMillis()));
-        ${table.objectName}Model.setDeleteFlag(Constants.DELETED);
-
-        ${table.objectName}Mapper.updateByPrimaryKeySelective(${table.objectName}Model);
-        log.info("### ${table.description}逻辑删除成功 ###");
-	}
+        // 转换为VO对象
+        ${table.objectName}VO ${table.objectName}VO = new ${table.objectName}VO();
+        BeanUtils.copyProperties(${table.objectName}, ${table.objectName}VO);
+         log.info("### ${table.description}修改成功 ###");
+        // 返回保存后结果
+        return ${table.objectName}VO;
+    }
 
    /**
     * 根据${table.description}ID查询
@@ -111,37 +126,48 @@ public class ${table.className}ServiceImpl implements ${table.className}Service 
     */
 	@Override
 	public ${table.className}VO findById(${table.primaryKey.javaType} id) {
-		${table.className} ${table.objectName}Model = ${table.objectName}Mapper.selectByPrimaryKey(id);
-		if (${table.objectName}Model == null) {
-            throw new CustomException(ResultCode.RESULT_DATA_NONE, "${table.description},id=" + id);
+	    // 参数校验
+        if (StringUtils.isBlank(id)) {
+           ExceptionCast.cast(ResultCode.PARAM_INVALID);
         }
-        log.info("### ${table.description}查询成功, ${table.objectName}={}###", JSON.toJSONString(${table.objectName}Model));
-        // model转换vo
-        ${table.className}VO ${table.objectName}VO = new ${table.className}VO();
-        BeanUtils.copyProperties(${table.objectName}Model, ${table.objectName}VO);
-        log.info("### ${table.description}Model转换VO成功， ${table.objectName}VO={}###", ${table.objectName}VO);
+        // 根据ID查询${table.description}
+		${table.className} ${table.objectName} = ${table.objectName}Mapper.selectById(id);
+		if (${table.objectName}Model == null) {
+            return null;
+        }
+        // 转换为VO对象
+        ${table.objectName}VO ${table.objectName}VO = new ${table.objectName}VO();
+        BeanUtils.copyProperties(${table.objectName}, ${table.objectName}VO);
+         log.info("### ${table.description}修改成功 ###");
+        // 返回保存后结果
         return ${table.objectName}VO;
 	}
 
-  /**
+   /**
      * ${table.description}模糊查询
      * @param queryConditionVO
      * @return
      */
     @Override
     public List<${table.className}VO> listByParams(${table.className}QueryConditionVO queryConditionVO) {
-        List<${table.className}> ${table.objectName}List = ${table.objectName}Mapper.selectByPageAndParam(queryConditionVO);
+        // 参数校验
+        if (queryConditionVO == null) {
+          queryConditionVO = new ${table.className}QueryConditionVO();
+        }
+        // 查询条件
+        QueryWrapper<${table.className}> queryWrapper = new QueryWrapper<>();
+        queryWrapper.like(StringUtils.isNotBlank(conditionVO.getName()), "name", conditionVO.getName());
+        // 执行查询
+        List<${table.className}> ${table.objectName}List = ${table.objectName}Mapper.selectList(queryWrapper);
         log.info("### ${table.description}Model模糊查询完毕，总条数：{}条###", ${table.objectName}List.size());
-
-        // ${table.description}Model转换VO数据
+        // ${table.description}转换VO数据
         List<${table.className}VO> ${table.objectName}VOList = new ArrayList<>();
         ${table.objectName}List.forEach(${table.objectName} -> {
             ${table.className}VO ${table.objectName}VO = new ${table.className}VO();
             BeanUtils.copyProperties(${table.objectName}, ${table.objectName}VO);
             ${table.objectName}VOList.add(${table.objectName}VO);
         });
-        log.info("### ${table.description}Model转换VO数据完毕###");
-
+        log.info("### ${table.description}转换VO数据完毕###");
         return ${table.objectName}VOList;
     }
 
@@ -154,27 +180,32 @@ public class ${table.className}ServiceImpl implements ${table.className}Service 
      */
 	@Override
     public QueryResult<${table.className}VO> listByPageAndParams(${table.className}QueryConditionVO queryConditionVO, Integer page, Integer size) {
-        // 分页查询
-        PageHelper.startPage(page, size);
-        List<${table.className}> ${table.objectName}List = ${table.objectName}Mapper.selectByPageAndParam(queryConditionVO);
-        // 获取分页后数据
-        PageInfo<${table.className}> pageInfo = new PageInfo<>(${table.objectName}List);
-        log.info("### ${table.description}分页查询完毕,总条数：{} ###", pageInfo.getTotal());
+        // 参数校验
+        if (queryConditionVO == null) {
+          queryConditionVO = new ${table.className}QueryConditionVO();
+        }
+        // 查询条件
+        QueryWrapper<${table.className}> queryWrapper = new QueryWrapper<>();
+        queryWrapper.like(StringUtils.isNotBlank(conditionVO.getName()), "name", conditionVO.getName());
+        // 分页条件
+        Page<${table.className}> pageInfo = new Page(page, size);
+        // 执行查询
+        Page<${table.className}> ${table.objectName}Page = ${table.objectName}Mapper.selectPage(pageInfo, queryWrapper);
+        long total = userPage.getTotal();
+        List<${table.className}> userList = ${table.objectName}Page.getRecords();
 
+        // ${table.description}转换VO数据
         List<${table.className}VO> ${table.objectName}VOList = new ArrayList<>();
-        // 补全数据
         ${table.objectName}List.forEach(${table.objectName} -> {
             ${table.className}VO ${table.objectName}VO = new ${table.className}VO();
             BeanUtils.copyProperties(${table.objectName}, ${table.objectName}VO);
             ${table.objectName}VOList.add(${table.objectName}VO);
         });
-        log.info("### ${table.description}Model转换VO数据完毕###");
-
-        // 封装需要返回的实体数据
-        QueryResult queryResult = new QueryResult();
-        queryResult.setTotal(pageInfo.getTotal());
+        log.info("### ${table.description}转换VO数据完毕###");
+        // 分装分页查询结果
+        QueryResult<${table.className}VO> queryResult = new QueryResult<>();
+        queryResult.setTotal(total);
         queryResult.setList(${table.objectName}VOList);
-
         return queryResult;
     }
 }

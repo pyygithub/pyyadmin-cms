@@ -1,10 +1,6 @@
 package ${table.daoPackageName};
 
-import java.util.List;
-
-import ${table.modelPackageName}.${table.className};
-import tk.mybatis.mapper.common.Mapper;
-import ${table.voPackageName}.*;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import ${table.modelPackageName}.*;
 
 /**
@@ -16,7 +12,5 @@ import ${table.modelPackageName}.*;
  * 版本：  v1.0
  * ---------------------------
  */
-public interface ${table.className}Mapper extends Mapper<${table.className}>{
-
-    List<${table.className}> selectByPageAndParam(${table.className}QueryConditionVO queryConditionVO);
+public interface ${table.className}Mapper extends BaseMapper<${table.className}>{
 }

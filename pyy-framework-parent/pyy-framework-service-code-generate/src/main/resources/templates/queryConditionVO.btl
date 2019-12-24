@@ -17,7 +17,7 @@ import java.util.Date;
  * ---------------------------
  */
 @Data
-@ApiModel(value = "${table.className}QueryConditionVO",description = "${table.description}查询条件类")
+@ApiModel(value = "${table.className}QueryConditionVO",description = "${table.description}查询条件")
 public class ${table.className}QueryConditionVO {
 
     @ApiModelProperty("名称")

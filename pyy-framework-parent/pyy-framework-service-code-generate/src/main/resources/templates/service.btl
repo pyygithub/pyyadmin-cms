@@ -29,10 +29,8 @@ public interface ${table.className}Service {
     /**
      * ${table.description}删除
      * @param id
-     * @param userId
-     * @param username
      */
-	public void delete(${table.primaryKey.javaType} id, String userId, String username);
+	public void delete(${table.primaryKey.javaType} id);
 
     /**
      * 根据${table.description}ID查询
@@ -45,8 +43,7 @@ public interface ${table.className}Service {
      * @param queryConditionVO
      * @return
      */
-    public List<${table.className}VO> listByParams(${table.className}QueryConditionVO queryConditionVO);
-
+    public List<${table.className}VO> findList(${table.className}QueryConditionVO queryConditionVO);
 
     /**
      * ${table.description}分页模糊查询
@@ -55,5 +52,5 @@ public interface ${table.className}Service {
      * @param size
      * @return
      */
-    public QueryResult<${table.className}VO> listByPageAndParams(${table.className}QueryConditionVO queryConditionVO, Integer page, Integer size);
+    public QueryResult<${table.className}VO> findList(${table.className}QueryConditionVO queryConditionVO, Integer page, Integer size);
 }
