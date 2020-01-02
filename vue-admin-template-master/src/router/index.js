@@ -81,15 +81,36 @@ export const constantRoutes = [
       {
         path: '/teach/course',
         name: '我的课程',
-        component: () => import('@/views/generate/dataSource/index.vue'),
+        component: () => import('@/views/teach/course/index.vue'),
         meta: { title: '我的课程', icon: 'course' }
       },
       {
         path: '/teach/media',
         name: '我的媒资',
-        component: () => import('@/views/generate/singleTable/index.vue'),
+        component: () => import('@/views/generate/codeGenerate/index.vue'),
         meta: { title: '我的媒资', icon: 'media' }
       }
+    ]
+  },
+  {
+    path: '/system',
+    component: Layout,
+    redirect: 'noredirect',
+    name: '系统管理',
+    meta: { title: '系统管理', icon: 'teach' },
+    children: [
+      {
+        path: '/system/dept',
+        name: '部门管理',
+        component: () => import('@/views/system/dept/index.vue'),
+        meta: { title: '部门管理', icon: 'course' }
+      },
+      {
+        path: '/system/job',
+        name: '岗位管理',
+        component: () => import('@/views/system/dept/index.vue'),
+        meta: { title: '岗位管理', icon: 'course' }
+      },
     ]
   },
   {
@@ -106,9 +127,9 @@ export const constantRoutes = [
         meta: { title: '数据源配置', icon: 'ds' }
       },
       {
-        path: '/generate/singleTable',
+        path: '/generate/codeGenerate',
         name: '代码生成',
-        component: () => import('@/views/generate/singleTable/index.vue'),
+        component: () => import('@/views/generate/codeGenerate/index.vue'),
         meta: { title: '代码生成', icon: 'multi_table' }
       }
     ]

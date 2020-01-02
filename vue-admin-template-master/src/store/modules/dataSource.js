@@ -1,3 +1,6 @@
+/**
+ * 数据源管理
+ */
 import { getDataSourceById } from '../../api/generate/dataSource/index'
 
 const state = {

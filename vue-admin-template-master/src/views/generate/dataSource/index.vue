@@ -91,7 +91,7 @@
         const result = await generateDataSourceAPI.getDataSourcePageList(this.page, this.size, this.params)
         const queryResult = result.data
         this.total = queryResult.total
-        this.list = queryResult.list
+        this.list = queryResult.records
       },
       handleAdd () {
         this.$refs.addModel.title = '新增'

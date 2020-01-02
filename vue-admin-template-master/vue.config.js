@@ -1,13 +1,13 @@
 'use strict'
 const path = require('path')
-const defaultSettings = require('./src/settings.js')
+// const defaultSettings = require('@/utils/settings.js')
 
 function resolve(dir) {
   return path.join(__dirname, dir)
 }
 
-const name = defaultSettings.title || 'vue Admin Template' // page title
-
+// const name = defaultSettings.title || 'vue Admin Template' // page title
+const name = 'vue Admin Template' // page title
 // If your port is set to 80,
 // use administrator privileges to execute the command line.
 // For example, Mac: sudo npm run
@@ -45,8 +45,8 @@ module.exports = {
           '^/api':'' //实际请求去掉/api
         }
       },
-      '/api/generate': {
-        target: 'http://127.0.0.1:31002',
+      '/api/v1/base-server/': {
+        target: 'http://127.0.0.1:9000',
         changeOrigin: true,
         pathRewrite: {
           '^/api':'' //实际请求去掉/api

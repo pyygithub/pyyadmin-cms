@@ -10,7 +10,7 @@ import router from './router'
 import './filters' // 加载过滤器
 
 import '@/icons' // icon
-import '@/permission' // permission control
+import '@/utils/permission' // permission control
 import '@/mock'
 
 Vue.use(ElementUI)

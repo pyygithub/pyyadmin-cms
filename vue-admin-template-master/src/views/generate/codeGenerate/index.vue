@@ -1,5 +1,6 @@
 <template>
   <div class="page-container">
+    <!-- 左侧导航 -->
     <div class="left-container">
       <div class="toolbar">
         <el-card class="box-card">
@@ -32,8 +33,9 @@
         </el-card>
       </div>
     </div>
-
+    <!-- 右侧内容 -->
     <div class="right-container">
+      <!-- 表基本信息 -->
       <div class="base-info">
         <el-form ref="tableForm" class="tableForm" :model="tableModel" :inline="true" label-width="80px"
                  size="small">
@@ -48,6 +50,7 @@
           </el-form-item>
         </el-form>
       </div>
+      <!-- 表列信息 -->
       <div class="column-info">
         <el-table :data="tableModel.columns" class="right-table" size="mini" height="500" max-height="500" border>
           <el-table-column
@@ -76,49 +79,48 @@
           <el-table-column prop="description" label="描述"></el-table-column>
         </el-table>
       </div>
+      <!-- 生成配置信息 -->
       <div class="option-info">
-        <el-form ref="optionForm" class="optionForm" :inline="true" label-width="80px"
-                 size="small">
+        <el-form ref="optionForm" class="optionForm" :inline="true" label-width="80px"size="small">
           <span>
             <el-form-item label="作者">
               <el-input v-model="generateModel.author" placeholder="如：张三"/>
             </el-form-item>
             <el-form-item label="包名">
               <el-input v-model="generateModel.basePackage" placeholder="如：com.thtf">
-                <el-button type="file" slot="append" @click="chooseBasePackage">
-                  <svg-icon icon-class="folder"/></el-button>
+                <el-button type="file" slot="append" @click="chooseBasePackage"><svg-icon icon-class="folder"/></el-button>
               </el-input>
             </el-form-item>
             <el-form-item label="路径">
               <el-input v-model="generateModel.outPutFolderPath" placeholder="生成代码存放目录">
-                <el-button type="file" slot="append" @click="chooseOutputFolder">
-                  <svg-icon icon-class="folder"/></el-button>
+                <el-button type="file" slot="append" @click="chooseOutputFolder"><svg-icon icon-class="folder"/></el-button>
               </el-input>
             </el-form-item>
           </span>
           <span style="float:right; padding-right:20px;">
-            <el-button size="small" type="primary" :disabled="disabledGenerateBtn" :loading="generateLoading"
+            <el-button size="small" type="primary"
+                       :disabled="disabledGenerateBtn"
+                       :loading="generateLoading"
                        @click="generateCode">生成代码</el-button>
           </span>
         </el-form>
       </div>
     </div>
-    <!--数据源配置界面-->
+    <!-- 数据源配置界面 -->
     <datasource-dialog ref="datasourceDialog" v-if="datasourceVisible"></datasource-dialog>
-    <!--表格数据选择界面-->
-    <select-table-dialog title="选择要生成的表" ref="selectTableDialog" v-if="selectTableDialogVisible"
+    <!-- 表格数据选择界面 -->
+    <code-generate-dialog title="选择要生成的表" ref="selectTableDialog" v-if="selectTableDialogVisible"
                          :data="selectTableData" :columns="selectTableColumns" @selectionChange="tableSelectionChange"
                          :showHeader="true">
-    </select-table-dialog>
+    </code-generate-dialog>
   </div>
 </template>
 
 <script>
   import * as generateDataSourceAPI from '../../../api/generate/dataSource/index'
-
   import * as generateAPI from '../../../api/generate/index'
-  import SelectTableDialog from "./singleTableDialog.vue"
-  import {mapState, mapActions} from 'vuex'
+  import CodeGenerateDialog from "./codeGenerateDialog.vue"
+  import {mapGetters, mapActions} from 'vuex'
 
   export default {
     data() {
@@ -169,9 +171,9 @@
         this.$refs.tree.filter(val)
       }
     },
-    computed: mapState({
-      currentDataSource: (state) => state.dataSource.currentDataSource,
-    }),
+    computed: {
+      ...mapGetters(['currentDataSource'])
+    },
     mounted() {
       this.getDataSources()
     },
@@ -246,7 +248,7 @@
       }
     },
     components: {
-      SelectTableDialog
+      CodeGenerateDialog
     }
   }
 </script>

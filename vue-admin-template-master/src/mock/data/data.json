@@ -1,12 +1,10 @@
 {
   "token": {
-    "success": true,
-    "code": 10000,
+    "code": 200,
     "data": "admin-token"
   },
   "userInfo": {
-    "success": true,
-    "code": 10000,
+    "code": 200,
     "data": {
       "roles": ["editor"],
       "introduction": "I am an editor",
@@ -15,8 +13,7 @@
     }
   },
   "logout": {
-    "success": true,
-    "code": 10000,
+    "code": 200,
     "data": "success"
   }
 }

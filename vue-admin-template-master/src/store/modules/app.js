@@ -1,3 +1,6 @@
+/**
+ * 系统应用
+ */
 import Cookies from 'js-cookie'
 
 const state = {

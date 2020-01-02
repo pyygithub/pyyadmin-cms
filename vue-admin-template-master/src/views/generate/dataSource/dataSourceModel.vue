@@ -31,10 +31,6 @@
         <el-form-item label="数据库名" prop="dbName">
           <el-input v-model="dataSourceForm.dbName" placeholder="请输入数据库名"></el-input>
         </el-form-item>
-        <el-form-item label="创建时间">
-          <el-date-picker type="datetime" placeholder="创建时间"
-                          v-model="dataSourceForm.createTime"></el-date-picker>
-        </el-form-item>
       </el-form>
 
       <div slot="footer" class="dialog-footer" style="text-align: right">
@@ -70,8 +66,7 @@
           port: '',
           username: '',
           password: '',
-          dbName: '',
-          createTime: new Date()
+          dbName: ''
         },
         // 验证规则
         dataSourceFormRules: {
@@ -99,8 +94,6 @@
         this.$nextTick(() => {
           // 异步查询
           generateDataSourceAPI.getDataSourceById(id).then(res => {
-            console.log(res)
-            if (res.success) {
               const dataSource = res.data
               this.dataSourceForm.id = dataSource.id
               this.dataSourceForm.name = dataSource.name
@@ -110,8 +103,6 @@
               this.dataSourceForm.username = dataSource.username
               this.dataSourceForm.password = dataSource.password
               this.dataSourceForm.dbName = dataSource.dbName
-              this.dataSourceForm.createTime = dataSource.createTime
-            }
           })
         })
       },

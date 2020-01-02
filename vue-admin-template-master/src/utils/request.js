@@ -44,7 +44,7 @@ service.interceptors.response.use(
    */
   response => {
     const res = response.data
-    if (!res.success) {
+    if (res.code !== 200) {
       // 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
       if (res.code === 50008 || res.code === 50012 || res.code === 50014) {
         // to re-login
@@ -70,7 +70,7 @@ service.interceptors.response.use(
       return res
     }
   },
-  error => {
+  err => {
     console.log('err' + err) // for debug
     if (err && err.response) {
       switch (err.response.status) {
