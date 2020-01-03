@@ -1,16 +1,18 @@
+import { GENERATE_SERVER_API_GATEWAY_URL } from '@/api/serverUrl'
 import { createAPI } from '@/utils/request'
 
-export const getDataSourceById = (id) => createAPI(`/v1/dataSource/${id}`, 'get')
 
-export const getDataSourceList = (params) => createAPI('/v1/dataSources', 'get', params)
+export const getDataSourceById = (id) => createAPI(`${GENERATE_SERVER_API_GATEWAY_URL}/dataSource/${id}`, 'get')
 
-export const getDataSourcePageList = (page, size, params) => createAPI(`/v1/dataSources/${page}/${size}`, 'get', params)
+export const getDataSourceList = (params) => createAPI(`${GENERATE_SERVER_API_GATEWAY_URL}/dataSource/list`, 'get', params)
 
-export const addDataSource = (dataSource) => createAPI('/v1/dataSource', 'post', dataSource)
+export const getDataSourcePageList = (page, size, params) => createAPI(`${GENERATE_SERVER_API_GATEWAY_URL}/dataSource/page?page=${page}&size=${size}`, 'get', params)
 
-export const updateDataSource = (id, dataSource) => createAPI(`/v1/dataSource/${id}`, 'put', dataSource)
+export const addDataSource = (dataSource) => createAPI(`${GENERATE_SERVER_API_GATEWAY_URL}/dataSource`, 'post', dataSource)
 
-export const deleteDataSource = (id) => createAPI(`/v1/dataSource/${id}`, 'delete')
+export const updateDataSource = (id, dataSource) => createAPI(`${GENERATE_SERVER_API_GATEWAY_URL}/dataSource/${id}`, 'put', dataSource)
+
+export const deleteDataSource = (id) => createAPI(`${GENERATE_SERVER_API_GATEWAY_URL}/dataSource/${id}`, 'delete')
 
 
 

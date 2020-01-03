@@ -1,17 +1,16 @@
+import { BASE_SERVER_API_GATEWAY_URL } from '@/api/serverUrl'
 import { createAPI } from '@/utils/request'
 
-/** 服务器API接口网关路径 */
-const api_gateway_url = '/v1/base-server';
 
-export const getDeptById = (id) => createAPI(`${api_gateway_url}/dept/${id}`, 'get')
+export const getDeptById = (id) => createAPI(`${BASE_SERVER_API_GATEWAY_URL}/dept/${id}`, 'get')
 
-export const getDeptTreeList = (params) => createAPI(`${api_gateway_url}/dept/treeList`, 'get', params)
+export const getDeptTreeList = (params) => createAPI(`${BASE_SERVER_API_GATEWAY_URL}/dept/treeList`, 'get', params)
 
-export const addDept = (dept) => createAPI(`${api_gateway_url}/dept`, 'post', dept)
+export const addDept = (dept) => createAPI(`${BASE_SERVER_API_GATEWAY_URL}/dept`, 'post', dept)
 
-export const updateDept = (id, dept) => createAPI(`${api_gateway_url}/dept/${id}`, 'put', dept)
+export const updateDept = (id, dept) => createAPI(`${BASE_SERVER_API_GATEWAY_URL}/dept/${id}`, 'put', dept)
 
-export const deleteDept = (id) => createAPI(`${api_gateway_url}/dept/${id}`, 'delete')
+export const deleteDept = (id) => createAPI(`${BASE_SERVER_API_GATEWAY_URL}/dept/${id}`, 'delete')
 
 
 

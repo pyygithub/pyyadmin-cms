@@ -37,15 +37,7 @@ module.exports = {
       errors: true
     },
     proxy: {
-
-      '/api/cms': {
-        target: 'http://127.0.0.1:31001',
-        changeOrigin: true,
-        pathRewrite: {
-          '^/api':'' //实际请求去掉/api
-        }
-      },
-      '/api/v1/base-server/': {
+      '/api': {
         target: 'http://127.0.0.1:9000',
         changeOrigin: true,
         pathRewrite: {

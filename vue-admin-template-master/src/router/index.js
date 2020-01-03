@@ -97,19 +97,19 @@ export const constantRoutes = [
     component: Layout,
     redirect: 'noredirect',
     name: '系统管理',
-    meta: { title: '系统管理', icon: 'teach' },
+    meta: { title: '系统管理', icon: 'sys' },
     children: [
       {
         path: '/system/dept',
         name: '部门管理',
         component: () => import('@/views/system/dept/index.vue'),
-        meta: { title: '部门管理', icon: 'course' }
+        meta: { title: '部门管理', icon: 'dept' }
       },
       {
         path: '/system/job',
         name: '岗位管理',
-        component: () => import('@/views/system/dept/index.vue'),
-        meta: { title: '岗位管理', icon: 'course' }
+        component: () => import('@/views/system/job/index.vue'),
+        meta: { title: '岗位管理', icon: 'job' }
       },
     ]
   },

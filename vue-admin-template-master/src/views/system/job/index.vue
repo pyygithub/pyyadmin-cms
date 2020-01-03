@@ -2,32 +2,24 @@
   <div class="site-list">
     <!-- 查询条件 -->
     <el-form :inline="true" :model="params" class="demo-form-inline" size="small">
-      <el-form-item label="数据源名称">
-        <el-input v-model="params.name" placeholder="请输入数据源名称"></el-input>
-      </el-form-item>
-      <el-form-item label="数据库名称">
-        <el-input v-model="params.dbName" placeholder="请输入数据库名称"></el-input>
-      </el-form-item>
-      <el-form-item label="用户名">
-        <el-input v-model="params.username" placeholder="请输入用户名"></el-input>
+      <el-form-item label="岗位名称">
+        <el-input v-model="params.name" placeholder="请输入岗位名称"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click.prevent="handleQuery" icon="el-icon-search">查询</el-button>
       </el-form-item>
-      <!-- 新增数据源按钮 -->
-      <el-button @click.prevent="handleAdd" type="primary"  size="small" icon="el-icon-plus">新增数据源</el-button>
+      <!-- 新增岗位按钮 -->
+      <el-button @click.prevent="handleAdd" type="primary"  size="small" icon="el-icon-plus">新增岗位</el-button>
     </el-form>
 
-    <!-- 数据源列表 -->
+    <!-- 岗位列表 -->
     <el-table :data="list" style="width: 100%">
-      <el-table-column type="index" label="序号" width="80"/>
-      <el-table-column prop="name" label="数据源名称" width="200"/>
-      <el-table-column prop="dbType" label="类型" width="200"/>
-      <el-table-column prop="host" label="主机地址" width="200"/>
-      <el-table-column prop="port" label="端口" width="100"/>
-      <el-table-column prop="username" label="用户名"/>
-      <el-table-column prop="dbName" label="数据库名称"/>
-      <el-table-column prop="createTime" label="创建时间" width="180">
+      <el-table-column type="selection" width="55"/>
+      <el-table-column prop="name" label="岗位名称" />
+      <el-table-column prop="dept" label="所属部门"/>
+      <el-table-column prop="sort" label="排序" />
+      <el-table-column prop="remark" label="备注" />
+      <el-table-column prop="createTime" label="创建时间">
         <template slot-scope="scope">
           <span>{{ scope.row.createTime | dateFormat}}</span>
         </template>
@@ -50,56 +42,54 @@
                    :total="total" style="margin-top: 15px">
     </el-pagination>
 
-    <!-- 新增数据源 -->
-    <add-modal ref="addModel" ></add-modal>
+    <!-- 新增或修改岗位 -->
+    <job-modal ref="addModel" ></job-modal>
   </div>
 </template>
 
 <script>
-  import * as generateDataSourceAPI from '../../../api/generate/dataSource/index'
-  import addModal from './dataSourceModal.vue'
+  import * as jobAPI from '../../../api/system/job/index'
+  import jobModal from './jobModal.vue'
   export default {
     data() {
       return {
-        list: [], // 数据源列表
+        list: [], // 岗位列表
         total: 0,
         currentPage: 1,
         page: 1,//页码
         size: 5,//每页显示个数
         params: {
-          name: '',// 数据源名称
-          username: '',// 数据库用户名
-          dbName: '',// 数据源名称
+          name: '',// 岗位名称
         },
-        isShowAddModal: false, // 新增数据源Drawer显示状态
+        isShowAddModal: false, // 新增岗位Drawer显示状态
       }
     },
     mounted () {
-      // 默认查询数据源
+      // 默认查询岗位
       this.handleQuery()
     },
     methods: {
       // 查询
       async handleQuery () {
-        const result = await generateDataSourceAPI.getDataSourcePageList(this.page, this.size, this.params)
+        const result = await jobAPI.getJobPageList(this.page, this.size, this.params)
         const queryResult = result.data
         this.total = queryResult.total
         this.list = queryResult.records
       },
       handleAdd () {
-        this.$refs.addModel.title = '新增'
-        this.$refs.addModel.openAdd()
+        this.$refs.jobModal.title = '新增'
+        this.$refs.jobModal.openAdd()
       },
       handleEdit (id) {
-        this.$refs.addModel.title = '编辑'
-        this.$refs.addModel.openEdit(id)
+        this.$refs.jobModal.title = '编辑'
+        this.$refs.jobModal.openEdit(id)
       },
       handleDelete (id) {
         this.$confirm('此操作将永久删除该数据, 是否继续?', '提示', {
           type: 'warning'
         }).then(async () => {
           // 执行异步删除
-          await generateDataSourceAPI.deleteDataSource(id)
+          await jobAPI.deleteJob(id)
           this.$message({type: 'success', message: '删除成功!'});
           // 刷新列表
           this.handleQuery()
@@ -124,7 +114,7 @@
       },
     },
     components: {
-      addModal
+      jobModal
     }
   }
 </script>

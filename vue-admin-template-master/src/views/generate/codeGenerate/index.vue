@@ -119,7 +119,7 @@
 <script>
   import * as generateDataSourceAPI from '../../../api/generate/dataSource/index'
   import * as generateAPI from '../../../api/generate/index'
-  import CodeGenerateDialog from "./codeGenerateDialog.vue"
+  import CodeGenerateDialog from "./codeGenerateModal.vue"
   import {mapGetters, mapActions} from 'vuex'
 
   export default {
