@@ -3,13 +3,13 @@
     <!-- 查询条件 -->
     <el-form :inline="true" :model="params" class="demo-form-inline" size="small">
       <el-form-item label="数据源名称">
-        <el-input v-model="params.name" placeholder="请输入数据源名称"></el-input>
+        <el-input v-model="params.name" placeholder="请输入数据源名称"/>
       </el-form-item>
       <el-form-item label="数据库名称">
-        <el-input v-model="params.dbName" placeholder="请输入数据库名称"></el-input>
+        <el-input v-model="params.dbName" placeholder="请输入数据库名称"/>
       </el-form-item>
       <el-form-item label="用户名">
-        <el-input v-model="params.username" placeholder="请输入用户名"></el-input>
+        <el-input v-model="params.username" placeholder="请输入用户名"/>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click.prevent="handleQuery" icon="el-icon-search">查询</el-button>
@@ -20,19 +20,18 @@
 
     <!-- 数据源列表 -->
     <el-table :data="list" style="width: 100%">
-      <el-table-column type="index" label="序号" width="80"/>
-      <el-table-column prop="name" label="数据源名称" width="200"/>
-      <el-table-column prop="dbType" label="类型" width="200"/>
-      <el-table-column prop="host" label="主机地址" width="200"/>
-      <el-table-column prop="port" label="端口" width="100"/>
+      <el-table-column prop="name" label="数据源名称"/>
+      <el-table-column prop="dbType" label="类型" />
+      <el-table-column prop="host" label="主机地址" />
+      <el-table-column prop="port" label="端口" />
       <el-table-column prop="username" label="用户名"/>
       <el-table-column prop="dbName" label="数据库名称"/>
-      <el-table-column prop="createTime" label="创建时间" width="180">
+      <el-table-column prop="createTime" label="创建时间" width="180px">
         <template slot-scope="scope">
           <span>{{ scope.row.createTime | dateFormat}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center">
+      <el-table-column label="操作" align="center" width="200px">
         <template slot-scope="scope">
           <el-button size="mini" icon="el-icon-edit"   type="primary"  @click="handleEdit(scope.row.id)">编辑</el-button>
           <el-button size="mini" icon="el-icon-delete" type="danger"   @click="handleDelete(scope.row.id)">删除</el-button>

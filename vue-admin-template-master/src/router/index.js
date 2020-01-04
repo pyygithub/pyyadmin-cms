@@ -95,7 +95,7 @@ export const constantRoutes = [
   {
     path: '/system',
     component: Layout,
-    redirect: 'noredirect',
+    redirect: '/system/dept',
     name: '系统管理',
     meta: { title: '系统管理', icon: 'sys' },
     children: [

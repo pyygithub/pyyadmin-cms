@@ -3,39 +3,28 @@
     :title="title"
     :visible.sync="visible"
     @close="resetForm"
-    :wrapperClosable="false" ref="dataSourceDrawer" size="35%">
-
+    :wrapperClosable="false" ref="jobDrawer" size="30%">
     <div class="model-content">
-      <el-form ref="dataSourceForm" :rules="dataSourceFormRules"  :model="dataSourceForm" label-width="100px" size="small">
-        <el-form-item label="数据源名称" prop="name">
-          <el-input v-model="dataSourceForm.name" type="text" placeholder="请输入数据源名称"></el-input>
+      <el-form :model="jobForm" :rules="jobFormRules" ref="jobForm" label-width="80px" size="small">
+        <el-form-item label="岗位名称" prop="name">
+          <el-input v-model="jobForm.name" auto-complete="off"/>
         </el-form-item>
-        <el-form-item label="数据库类型" prop="dbType">
-          <el-select v-model="dataSourceForm.dbType" placeholder="请选择数据库类型" style="width: 100%;">
-            <el-option label="MySQL" value="MySQL"></el-option>
-            <el-option label="Oracle" value="Oracle"></el-option>
-          </el-select>
+        <el-form-item label="部门" prop="deptId">
+          <treeselect v-model="jobForm.deptId"
+                      :options="deptTreeList"
+                      :default-expand-level="1"
+                      :show-count="true"
+                      placeholder="请选择部门"/>
         </el-form-item>
-        <el-form-item label="主机IP" prop="host">
-          <el-input v-model="dataSourceForm.host" placeholder="请输入主机IP"></el-input>
+        <el-form-item label="排序" prop="sort">
+          <el-input-number v-model="jobForm.sort" controls-position="right"  :min="1" :max="100"/>
         </el-form-item>
-        <el-form-item label="端口号" prop="port">
-          <el-input v-model="dataSourceForm.port" type="number" placeholder="请输入端口号"></el-input>
-        </el-form-item>
-        <el-form-item label="用户名" prop="username">
-          <el-input v-model="dataSourceForm.username" placeholder="请输入用户名"></el-input>
-        </el-form-item>
-        <el-form-item label="密码" prop="password">
-          <el-input v-model="dataSourceForm.password" type="password" placeholder="请输入密码"></el-input>
-        </el-form-item>
-        <el-form-item label="数据库名" prop="dbName">
-          <el-input v-model="dataSourceForm.dbName" placeholder="请输入数据库名"></el-input>
+        <el-form-item label="备注" prop="remark">
+          <el-input type="textarea" v-model="jobForm.remark" :autosize="{ minRows: 2, maxRows: 6}" placeholder="请输入内容" />
         </el-form-item>
       </el-form>
-
       <div slot="footer" class="dialog-footer" style="text-align: right">
         <el-button type="plain" size="small" @click="handleCancel">关闭</el-button>
-        <el-button type="primary" size="small":loading="testLoading" @click="handleTestConnection">测试连接</el-button>
         <el-button type="primary" size="small" @click="handleSubmit">提交</el-button>
       </div>
     </div>
@@ -43,100 +32,91 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import * as generateDataSourceAPI from '../../../api/generate/dataSource/index'
-  import * as generateAPI from '../../../api/generate/index'
+  // import the component
+  import Treeselect from '@riophae/vue-treeselect'
+  // import the styles
+  import '@riophae/vue-treeselect/dist/vue-treeselect.css'
+  import * as jobAPI from '../../../api/system/job/index'
+  import * as deptAPI from '../../../api/system/dept/index'
 
   export default {
-    name: 'addModal',
+    name: 'jobModal',
     data () {
       return {
         title: '',
         visible: false,
         confirmLoading: false,
-        // 数据源列表
-        siteList: [],
-        // 模版列表
-        templateList: [],
+        // 部门树列表
+        deptTreeList: [],
         // 新增界面数据
-        dataSourceForm: {
+        jobForm: {
           id: '',
           name: '',
-          dbType: '',
-          host: '',
-          port: '',
-          username: '',
-          password: '',
-          dbName: ''
+          deptId: null,
+          sort: 1,
+          remark: '',
         },
         // 验证规则
-        dataSourceFormRules: {
-          name: [{required: true, message: '请选择数据源名称', trigger: 'blur'}],
-          dbType: [{required: true, message: '请选择数据源类型', trigger: 'blur'}],
-          host: [{required: true, message: '请输入主机IP地址', trigger: 'blur'}],
-          port: [{required: true, message: '请输入端口', trigger: 'blur'}],
-          username: [{required: true, message: '请输入用户名', trigger: 'blur'}],
-          password: [{required: true, message: '请输入密码', trigger: 'blur'}],
-          dbName: [{required: true, message: '请输入数据库名称', trigger: 'blur'}],
-        },
-        testLoading: false, // 测试连接
-
+        jobFormRules: {
+          name: [{required: true, message: '请输入岗位名称', trigger: 'blur'}],
+        }
       }
     },
+    mounted () {
+    },
     methods: {
+      // 查询部门树列表
+      async handleQueryDeptTreeList () {
+        const result = await deptAPI.getDeptTreeList()
+        this.deptTreeList = result.data
+      },
       // 打开添加对话框
       openAdd () {
+        // 初始化岗位树列表
+        this.handleQueryDeptTreeList()
         this.visible = true
       },
       // 打开编辑对话框
       openEdit (id) {
-        console.log(id)
+        // 初始化部门树列表
+        this.handleQueryDeptTreeList()
         this.visible = true
         this.$nextTick(() => {
           // 异步查询
-          generateDataSourceAPI.getDataSourceById(id).then(res => {
-              const dataSource = res.data
-              this.dataSourceForm.id = dataSource.id
-              this.dataSourceForm.name = dataSource.name
-              this.dataSourceForm.dbType = dataSource.dbType
-              this.dataSourceForm.host = dataSource.host
-              this.dataSourceForm.port = dataSource.port
-              this.dataSourceForm.username = dataSource.username
-              this.dataSourceForm.password = dataSource.password
-              this.dataSourceForm.dbName = dataSource.dbName
+          jobAPI.getJobById(id).then(res => {
+            console.log(res)
+            const job = res.data
+            this.jobForm.id = job.id
+            this.jobForm.name = job.name
+            this.jobForm.deptId = job.dept.id
+            this.jobForm.sort = job.sort
+            this.jobForm.remark = job.remark
           })
         })
       },
       // 重置form
       resetForm () {
-        this.$refs.dataSourceForm.resetFields();
+        this.$refs.jobForm.resetFields();
       },
       // 关闭Drewer对话框
       handleCancel () {
         this.resetForm()
-        this.$refs.dataSourceDrawer.closeDrawer()
-      },
-      // 测试连接
-      async handleTestConnection () {
-       console.log('测试连接')
-        this.testLoading = true
-        await generateAPI.testConnection(this.dataSourceForm);
-        this.$notify({ title: '成功',  message: '测试数据源连接',  type: 'success'});
-        this.testLoading = false
+        console.log(this.$refs.jobDrawer)
+        this.$refs.jobDrawer.closeDrawer()
       },
       // 提交
       handleSubmit () {
         // 表单验证
-        this.$refs.dataSourceForm.validate(async (valid) => {
-          debugger
+        this.$refs.jobForm.validate(async (valid) => {
           if (valid) {
-            if (!this.dataSourceForm.id) {
+            if (!this.jobForm.id) {
               // 异步添加
-              await generateDataSourceAPI.addDataSource(this.dataSourceForm)
+              await jobAPI.addJob(this.jobForm)
             } else {
               // 异步修改
-              await generateDataSourceAPI.updateDataSource(this.dataSourceForm.id, this.dataSourceForm)
+              await jobAPI.updateJob(this.jobForm.id, this.jobForm)
             }
-            this.$notify({ title: '成功',  message: '提交数据源',  type: 'success'});
+            this.$notify({ title: '成功',  message: '提交页面',  type: 'success'});
             // 关闭对话框
             this.handleCancel()
             // 刷新查询
@@ -144,6 +124,9 @@
           }
         });
       }
+    },
+    components: {
+      Treeselect
     }
   }
 </script>

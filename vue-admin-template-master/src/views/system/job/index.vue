@@ -16,7 +16,7 @@
     <el-table :data="list" style="width: 100%">
       <el-table-column type="selection" width="55"/>
       <el-table-column prop="name" label="岗位名称" />
-      <el-table-column prop="dept" label="所属部门"/>
+      <el-table-column prop="dept.name" label="所属部门"/>
       <el-table-column prop="sort" label="排序" />
       <el-table-column prop="remark" label="备注" />
       <el-table-column prop="createTime" label="创建时间">
@@ -43,7 +43,7 @@
     </el-pagination>
 
     <!-- 新增或修改岗位 -->
-    <job-modal ref="addModel" ></job-modal>
+    <job-modal ref="jobModal" ></job-modal>
   </div>
 </template>
 
