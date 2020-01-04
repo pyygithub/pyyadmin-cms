@@ -84,7 +84,7 @@
         <el-form ref="optionForm" class="optionForm" :inline="true" size="small" label-width="60px">
           <span>
             <el-form-item label="作者">
-              <el-input v-model="generateModel.author" placeholder="如：张三"/>
+              <el-input v-model="generateModel.author" placeholder="如：张三" style="width: 100px !important;"/>
             </el-form-item>
             <el-form-item label="包名">
               <el-input v-model="generateModel.basePackage" placeholder="如：com.thtf">

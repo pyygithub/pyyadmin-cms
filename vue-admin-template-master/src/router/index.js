@@ -118,7 +118,7 @@ export const constantRoutes = [
     component: Layout,
     redirect: '/generate/dataSource',
     name: '代码生成器',
-    meta: { title: '代码生成器', icon: 'code_generate' },
+    meta: { title: '代码生成器', icon: 'code' },
     children: [
       {
         path: '/generate/dataSource',

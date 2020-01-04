@@ -20,7 +20,11 @@
           <el-input-number v-model="jobForm.sort" controls-position="right"  :min="1" :max="100"/>
         </el-form-item>
         <el-form-item label="备注" prop="remark">
-          <el-input type="textarea" v-model="jobForm.remark" :autosize="{ minRows: 2, maxRows: 6}" placeholder="请输入内容" />
+          <el-input type="textarea" v-model="jobForm.remark"
+                    :autosize="{ minRows: 4, maxRows: 6}"
+                    placeholder="请输入内容"
+                    maxlength="200"
+                    show-word-limit/>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer" style="text-align: right">
