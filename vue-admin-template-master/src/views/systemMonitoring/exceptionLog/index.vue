@@ -2,35 +2,82 @@
   <div class="site-list">
     <!-- 查询条件 -->
     <el-form :inline="true" :model="params" class="demo-form-inline" size="small">
-      <el-form-item label="岗位名称">
-        <el-input v-model="params.name" placeholder="请输入岗位名称"></el-input>
+      <el-form-item label="日志描述">
+        <el-input v-model="params.description" placeholder="请输入日志描述"></el-input>
+      </el-form-item>
+      <el-form-item label="操作人名称">
+        <el-input v-model="params.username" placeholder="请输入操作人名称"></el-input>
+      </el-form-item>
+      <el-form-item label="操作时间">
+        <el-date-picker
+          v-model="params.operateTimeRange"
+          type="datetimerange"
+          align="right"
+          size="small"
+          value-format="yyyy-MM-dd HH:mm:ss"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+          :default-time="['12:00:00', '08:00:00']"
+          style="width: 350px">
+        </el-date-picker>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click.prevent="handleQuery" icon="el-icon-search">查询</el-button>
       </el-form-item>
-      <!-- 新增岗位按钮 -->
-      <el-button @click.prevent="handleAdd" type="primary"  size="small" icon="el-icon-plus">新增岗位</el-button>
     </el-form>
 
-    <!-- 岗位列表 -->
+    <!-- 日志列表 -->
     <el-table :data="list" style="width: 100%">
-      <el-table-column type="selection" width="55"/>
-      <el-table-column prop="name" label="岗位名称" />
-      <el-table-column prop="dept.name" label="所属部门"/>
-      <el-table-column prop="sort" label="排序" />
-      <el-table-column prop="remark" label="备注" />
-      <el-table-column prop="createTime" label="创建时间">
-        <template slot-scope="scope">
-          <span>{{ scope.row.createTime | dateFormat}}</span>
+      <el-table-column type="expand">
+        <template slot-scope="props">
+          <el-form label-position="left" inline class="log-table-expand" size="small">
+            <el-form-item label="请求方式：">
+              <span>{{ props.row.requestMethod }}</span>
+            </el-form-item>
+            <el-form-item label="请求方法：">
+              <span>{{ props.row.classPath}}.{{ props.row.actionMethod}}()</span>
+            </el-form-item>
+            <el-form-item label="请求URL：">
+              <span>{{ props.row.actionUrl }}</span>
+            </el-form-item>
+            <el-form-item label="请求参数：">
+              <span>{{ props.row.params }}</span>
+            </el-form-item>
+          </el-form>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center">
+
+      <el-table-column prop="username" label="操作人名称" />
+      <el-table-column prop="requestIp" label="操作IP"/>
+      <el-table-column prop="description" label="操作描述" />
+      <el-table-column prop="exDesc" label="异常描述">
         <template slot-scope="scope">
-          <el-button size="mini" icon="el-icon-edit"   type="primary"  @click="handleEdit(scope.row.id)">编辑</el-button>
-          <el-button size="mini" icon="el-icon-delete" type="danger"   @click="handleDelete(scope.row.id)">删除</el-button>
+          <span v-html="scope.row.exDesc"></span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="browser" label="浏览器" />
+      <el-table-column prop="consumingTime" label="消耗时间">
+        <template slot-scope="scope">
+          <el-tag :type="scope.row.consumingTime >= 1000 ? 'danger' : 'success'">{{scope.row.consumingTime}}ms</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column prop="startTime" label="创建时间">
+        <template slot-scope="scope">
+          <span>{{ scope.row.startTime | dateFormat}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" align="center" width="120">
+        <template slot-scope="scope">
+          <el-button size="mini" plain type="warning" icon="el-icon-info"  @click="handleQueryExceptionDetail(scope.row.id)">异常详情</el-button>
         </template>
       </el-table-column>
     </el-table>
+
+    <el-dialog title="异常详情" :visible.sync="dialogTableVisible"  top="30px" width="75%">
+      <pre class="log-detail">
+        {{ exceptionDetail }}
+      </pre>
+    </el-dialog>
 
     <!-- 分页工具栏 -->
     <el-pagination @size-change="handleSizeChange"
@@ -41,62 +88,55 @@
                    layout="total, sizes, prev, pager, next, jumper"
                    :total="total" style="margin-top: 15px">
     </el-pagination>
-
-    <!-- 新增或修改岗位 -->
-    <job-modal ref="jobModal" ></job-modal>
   </div>
 </template>
 
 <script>
-  import * as jobAPI from '../../../api/systemManagement/job/index'
-  import jobModal from './jobModal.vue'
+  import * as operationLogAPI from '../../../api/systemMonitoring/operationLog/index'
   export default {
     data() {
       return {
-        list: [], // 岗位列表
+        list: [], // 日志列表
         total: 0,
         currentPage: 1,
         page: 1,//页码
         size: 5,//每页显示个数
         params: {
-          name: '',// 岗位名称
+          type: 2, // 正常日志
+          description:'', // 描述
+          username: '',// 操作人名称
+          operateTimeRange: '', // 操作时间范围
+          startTime:'', // 开始时间
+          finishTime: '',// 完成时间
         },
-        isShowAddModal: false, // 新增岗位Drawer显示状态
+        dialogTableVisible: false,
+        exceptionDetail: '', // 异常详情
+        isShowAddModal: false, // 新增日志Drawer显示状态
       }
     },
     mounted () {
-      // 默认查询岗位
+      // 默认查询日志
       this.handleQuery()
     },
     methods: {
       // 查询
       async handleQuery () {
-        const result = await jobAPI.getJobPageList(this.page, this.size, this.params)
+        if (this.params.operateTimeRange) {
+          this.params.startTime = this.params.operateTimeRange[0]
+          this.params.finishTime = this.params.operateTimeRange[1]
+        }
+        delete this.params.operateTimeRange // 时间参数不传递后台
+        console.log(this.params)
+        const result = await operationLogAPI.getOperationLogPageList(this.page, this.size, this.params)
         const queryResult = result.data
         this.total = queryResult.total
         this.list = queryResult.records
       },
-      handleAdd () {
-        this.$refs.jobModal.title = '新增'
-        this.$refs.jobModal.openAdd()
-      },
-      handleEdit (id) {
-        this.$refs.jobModal.title = '编辑'
-        this.$refs.jobModal.openEdit(id)
-      },
-      handleDelete (id) {
-        this.$confirm('此操作将永久删除该数据, 是否继续?', '提示', {
-          type: 'warning'
-        }).then(async () => {
-          // 执行异步删除
-          await jobAPI.deleteJob(id)
-          this.$message({type: 'success', message: '删除成功!'});
-          // 刷新列表
-          this.handleQuery()
-
-        }).catch(() => {
-          this.$message({type: 'info', message: '已取消删除'});
-        });
+      // 查询错误详情
+      async handleQueryExceptionDetail (id) {
+        this.dialogTableVisible = true
+        const result = await operationLogAPI.getExceptionDetailById(id)
+        this.exceptionDetail = result.data.exDetail
       },
       handleSizeChange(size) {
         console.log(`每页 ${size} 条`);
@@ -114,7 +154,26 @@
       },
     },
     components: {
-      jobModal
+
     }
   }
 </script>
+
+<style scoped>
+  .log-table-expand .el-form-item {
+    margin-right: 0;
+    margin-bottom: 0;
+    width: 100%;
+  }
+  .log-table-expand label {
+    width: 90px;
+    color: #97a8be;
+  }
+  .log-detail {
+    height: 750px;
+    overflow: scroll;
+  }
+  /deep/.el-dialog__body {
+    padding: 0px;
+  }
+</style>

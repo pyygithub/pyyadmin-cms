@@ -35,7 +35,7 @@
               <span>{{ props.row.requestMethod }}</span>
             </el-form-item>
             <el-form-item label="请求方法：">
-              <span>{{ props.row.classPath}}.{{ props.row.actionMethod}}（）</span>
+              <span>{{ props.row.classPath}}.{{ props.row.actionMethod}}()</span>
             </el-form-item>
             <el-form-item label="请求URL：">
               <span>{{ props.row.actionUrl }}</span>
