@@ -93,23 +93,44 @@ export const constantRoutes = [
     ]
   },
   {
-    path: '/system',
+    path: '/sysMgr',
     component: Layout,
-    redirect: '/system/dept',
+    redirect: '/sysMgr/dept',
     name: '系统管理',
     meta: { title: '系统管理', icon: 'sys' },
     children: [
       {
-        path: '/system/dept',
+        path: '/systemManagement/dept',
         name: '部门管理',
-        component: () => import('@/views/system/dept/index.vue'),
+        component: () => import('@/views/systemManagement/dept/index.vue'),
         meta: { title: '部门管理', icon: 'dept' }
       },
       {
-        path: '/system/job',
+        path: '/systemManagement/job',
         name: '岗位管理',
-        component: () => import('@/views/system/job/index.vue'),
+        component: () => import('@/views/systemManagement/job/index.vue'),
         meta: { title: '岗位管理', icon: 'job' }
+      },
+    ]
+  },
+  {
+    path: '/systemMonitoring',
+    component: Layout,
+    redirect: '/systemMonitoring/operationLog',
+    name: '系统监控',
+    meta: { title: '系统管理', icon: 'sysMonitor' },
+    children: [
+      {
+        path: '/systemMonitoring/operationLog',
+        name: '操作日志',
+        component: () => import('@/views/systemMonitoring/operationLog/index.vue'),
+        meta: { title: '操作日志', icon: 'operationLog' }
+      },
+      {
+        path: '/systemMonitoring/exceptionLog',
+        name: '异常日志',
+        component: () => import('@/views/systemMonitoring/exceptionLog/index.vue'),
+        meta: { title: '异常日志', icon: 'exceptionLog' }
       },
     ]
   },

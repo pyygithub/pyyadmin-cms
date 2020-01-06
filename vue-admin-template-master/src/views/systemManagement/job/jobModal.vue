@@ -40,8 +40,8 @@
   import Treeselect from '@riophae/vue-treeselect'
   // import the styles
   import '@riophae/vue-treeselect/dist/vue-treeselect.css'
-  import * as jobAPI from '../../../api/system/job/index'
-  import * as deptAPI from '../../../api/system/dept/index'
+  import * as jobAPI from '../../../api/systemManagement/job/index'
+  import * as deptAPI from '../../../api/systemManagement/dept/index'
 
   export default {
     name: 'jobModal',

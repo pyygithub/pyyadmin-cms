@@ -48,7 +48,7 @@
 </template>
 
 <script>
-  import * as jobAPI from '../../../api/system/job/index'
+  import * as jobAPI from '../../../api/systemManagement/job/index'
   import jobModal from './jobModal.vue'
   export default {
     data() {

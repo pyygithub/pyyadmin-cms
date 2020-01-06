@@ -40,7 +40,7 @@
   import Treeselect from '@riophae/vue-treeselect'
   // import the styles
   import '@riophae/vue-treeselect/dist/vue-treeselect.css'
-  import * as deptAPI from '../../../api/system/dept/index'
+  import * as deptAPI from '../../../api/systemManagement/dept/index'
 
   export default {
     name: 'addModal',
