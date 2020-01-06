@@ -118,7 +118,7 @@ export const constantRoutes = [
     component: Layout,
     redirect: '/systemMonitoring/operationLog',
     name: '系统监控',
-    meta: { title: '系统管理', icon: 'sysMonitor' },
+    meta: { title: '系统监控', icon: 'sysMonitor' },
     children: [
       {
         path: '/systemMonitoring/operationLog',
@@ -131,6 +131,11 @@ export const constantRoutes = [
         name: '异常日志',
         component: () => import('@/views/systemMonitoring/exceptionLog/index.vue'),
         meta: { title: '异常日志', icon: 'exceptionLog' }
+      },
+      {
+        path: 'http://10.10.50.189:8848/nacos/',
+        name: 'Nacos服务器',
+        meta: { title: 'Nacos服务器', icon: 'service-nacos' }
       },
     ]
   },
