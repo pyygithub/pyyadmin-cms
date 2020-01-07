@@ -40,8 +40,8 @@
   import Treeselect from '@riophae/vue-treeselect'
   // import the styles
   import '@riophae/vue-treeselect/dist/vue-treeselect.css'
-  import * as jobAPI from '../../../api/systemManagement/job/index'
-  import * as deptAPI from '../../../api/systemManagement/dept/index'
+  import * as jobAPI from '../../../api/system/job/index'
+  import * as deptAPI from '../../../api/system/dept/index'
 
   export default {
     name: 'jobModal',
@@ -63,6 +63,7 @@
         // 验证规则
         jobFormRules: {
           name: [{required: true, message: '请输入岗位名称', trigger: 'blur'}],
+          deptId: [{required: true, message: '请选择部门', trigger: 'blur'}],
         }
       }
     },
@@ -120,7 +121,7 @@
               // 异步修改
               await jobAPI.updateJob(this.jobForm.id, this.jobForm)
             }
-            this.$notify({ title: '成功',  message: '提交页面',  type: 'success'});
+            this.$notify({ title: '成功',  message: '提交',  type: 'success'});
             // 关闭对话框
             this.handleCancel()
             // 刷新查询

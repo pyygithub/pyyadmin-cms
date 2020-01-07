@@ -38,7 +38,7 @@
 </template>
 
 <script>
-  import * as deptAPI from '../../../api/systemManagement/dept/index'
+  import * as deptAPI from '../../../api/system/dept/index'
   export default {
     data() {
       return {

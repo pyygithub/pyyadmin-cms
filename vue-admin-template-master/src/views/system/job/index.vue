@@ -8,12 +8,14 @@
       <el-form-item>
         <el-button type="primary" @click.prevent="handleQuery" icon="el-icon-search">查询</el-button>
       </el-form-item>
-      <!-- 新增岗位按钮 -->
-      <el-button @click.prevent="handleAdd" type="primary"  size="small" icon="el-icon-plus">新增岗位</el-button>
+      <!-- 新增按钮 -->
+      <el-button @click.prevent="handleAdd" type="primary"  size="small" icon="el-icon-plus">新增</el-button>
+      <!-- 批量删除按钮 -->
+      <el-button @click.prevent="handleBatchDelete" type="danger" size="small" :disabled="selections.length < 1" ><svg-icon icon-class="delBatch"/> 批量删除</el-button>
     </el-form>
 
     <!-- 岗位列表 -->
-    <el-table :data="list" style="width: 100%">
+    <el-table :data="list" @selection-change="handleSelectionChange">style="width: 100%">
       <el-table-column type="selection" width="55"/>
       <el-table-column prop="name" label="岗位名称" />
       <el-table-column prop="dept.name" label="所属部门"/>
@@ -27,7 +29,7 @@
       <el-table-column label="操作" align="center">
         <template slot-scope="scope">
           <el-button size="mini" icon="el-icon-edit"   type="primary"  @click="handleEdit(scope.row.id)">编辑</el-button>
-          <el-button size="mini" icon="el-icon-delete" type="danger"   @click="handleDelete(scope.row.id)">删除</el-button>
+          <el-button size="mini" icon="el-icon-delete" type="danger"  @click="handleDelete(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -48,7 +50,7 @@
 </template>
 
 <script>
-  import * as jobAPI from '../../../api/systemManagement/job/index'
+  import * as jobAPI from '../../../api/system/job/index'
   import jobModal from './jobModal.vue'
   export default {
     data() {
@@ -61,6 +63,7 @@
         params: {
           name: '',// 岗位名称
         },
+        selections: [], // 选择项
         isShowAddModal: false, // 新增岗位Drawer显示状态
       }
     },
@@ -76,6 +79,9 @@
         this.total = queryResult.total
         this.list = queryResult.records
       },
+      handleSelectionChange(selections) {
+        this.selections = selections
+      },
       handleAdd () {
         this.$refs.jobModal.title = '新增'
         this.$refs.jobModal.openAdd()
@@ -90,6 +96,21 @@
         }).then(async () => {
           // 执行异步删除
           await jobAPI.deleteJob(id)
+          this.$message({type: 'success', message: '删除成功!'});
+          // 刷新列表
+          this.handleQuery()
+
+        }).catch(() => {
+          this.$message({type: 'info', message: '已取消删除'});
+        });
+      },
+      handleBatchDelete () {
+        this.$confirm('此操作将永久删除选中数据, 是否继续?', '提示', {
+          type: 'warning'
+        }).then(async () => {
+          // 执行异步批量删除
+          const ids = this.selections.map(item => item.id)
+          await jobAPI.deleteBatchJob(ids)
           this.$message({type: 'success', message: '删除成功!'});
           // 刷新列表
           this.handleQuery()

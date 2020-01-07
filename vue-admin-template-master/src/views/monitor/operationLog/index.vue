@@ -49,8 +49,10 @@
 
       <el-table-column prop="username" label="操作人名称" />
       <el-table-column prop="requestIp" label="操作IP"/>
+      <el-table-column prop="ipLocation" label="IP归属地"/>
       <el-table-column prop="description" label="操作描述" />
       <el-table-column prop="browser" label="浏览器" />
+      <el-table-column prop="operatingSystem" label="操作系统" />
       <el-table-column prop="consumingTime" label="消耗时间">
         <template slot-scope="scope">
           <el-tag :type="scope.row.consumingTime >= 1000 ? 'danger' : 'success'">{{scope.row.consumingTime}}ms</el-tag>
@@ -77,7 +79,7 @@
 </template>
 
 <script>
-  import * as operationLogAPI from '../../../api/systemMonitoring/operationLog/index'
+  import * as operationLogAPI from '../../../api/monitor/operationLog/index'
   export default {
     data() {
       return {

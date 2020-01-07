@@ -93,49 +93,55 @@ export const constantRoutes = [
     ]
   },
   {
-    path: '/sysMgr',
+    path: '/system',
     component: Layout,
-    redirect: '/sysMgr/dept',
+    redirect: '/system/dept',
     name: '系统管理',
     meta: { title: '系统管理', icon: 'sys' },
     children: [
       {
-        path: '/systemManagement/dept',
+        path: '/system/dept',
         name: '部门管理',
-        component: () => import('@/views/systemManagement/dept/index.vue'),
+        component: () => import('@/views/system/dept/index.vue'),
         meta: { title: '部门管理', icon: 'dept' }
       },
       {
-        path: '/systemManagement/job',
+        path: '/system/job',
         name: '岗位管理',
-        component: () => import('@/views/systemManagement/job/index.vue'),
+        component: () => import('@/views/system/job/index.vue'),
         meta: { title: '岗位管理', icon: 'job' }
+      },
+      {
+        path: '/system/menu',
+        name: '菜单管理',
+        component: () => import('@/views/system/menu/index.vue'),
+        meta: { title: '菜单管理', icon: 'menu' }
       },
     ]
   },
   {
-    path: '/systemMonitoring',
+    path: '/monitor',
     component: Layout,
-    redirect: '/systemMonitoring/operationLog',
+    redirect: '/monitor/operationLog',
     name: '系统监控',
     meta: { title: '系统监控', icon: 'sysMonitor' },
     children: [
       {
-        path: '/systemMonitoring/operationLog',
+        path: '/monitor/operationLog',
         name: '操作日志',
-        component: () => import('@/views/systemMonitoring/operationLog/index.vue'),
+        component: () => import('@/views/monitor/operationLog/index.vue'),
         meta: { title: '操作日志', icon: 'operationLog' }
       },
       {
         path: '/systemMonitoring/exceptionLog',
         name: '异常日志',
-        component: () => import('@/views/systemMonitoring/exceptionLog/index.vue'),
+        component: () => import('@/views/monitor/exceptionLog/index.vue'),
         meta: { title: '异常日志', icon: 'exceptionLog' }
       },
       {
         path: 'http://10.10.50.189:8848/nacos/',
-        name: 'Nacos服务器',
-        meta: { title: 'Nacos服务器', icon: 'service-nacos' }
+        name: '服务监控',
+        meta: { title: '服务监控', icon: 'service-nacos' }
       },
     ]
   },

@@ -40,7 +40,7 @@
   import Treeselect from '@riophae/vue-treeselect'
   // import the styles
   import '@riophae/vue-treeselect/dist/vue-treeselect.css'
-  import * as deptAPI from '../../../api/systemManagement/dept/index'
+  import * as deptAPI from '../../../api/system/dept/index'
 
   export default {
     name: 'addModal',
@@ -118,7 +118,7 @@
               // 异步修改
               await deptAPI.updateDept(this.deptForm.id, this.deptForm)
             }
-            this.$notify({ title: '成功',  message: '提交页面',  type: 'success'});
+            this.$notify({ title: '成功',  message: '提交',  type: 'success'});
             // 关闭对话框
             this.handleCancel()
             // 刷新查询
